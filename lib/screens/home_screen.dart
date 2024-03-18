@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   checkloginstate() async {
-    final instance = AuthLocal();
+    final instance = AuthLocal.instance;
     if (await instance.user == null) {
       if (mounted) {
         Navigator.pushReplacementNamed(context, AppRouter.loginRoute);
@@ -41,12 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisSpacing: 20,
         ),
         children: [
-          _clickableHomeBox(
-            context,
-            text: 'Nishant',
-            icon: const Icon(Icons.ad_units),
-            route: AppRouter.homeRoute,
-          ),
+          ListTile(
+            title: 'Logout'.text.make(),
+            onTap: ()  async {
+              await AuthLocal.instance.logout();
+              if (context.mounted) {
+                Navigator.pushReplacementNamed(context, AppRouter.loginRoute);
+              }
+            },
+          )
         ],
       ).p20(),
     );

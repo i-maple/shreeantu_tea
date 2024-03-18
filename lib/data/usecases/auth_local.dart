@@ -10,10 +10,6 @@ class AuthLocal extends AuthEntity {
 
   AuthLocal._internal();
 
-  factory AuthLocal() {
-    return AuthLocal._internal();
-  }
-
   @override
   Future<String> login(
       {required String username, required String password}) async {
@@ -56,6 +52,7 @@ class AuthLocal extends AuthEntity {
         'phone': user.phone,
         'email': user.email,
         'createdAt': DateTime.now(),
+        'createdBy': user,
       };
       await bo.put(user.username, infoMap);
       await bo.put('currentUser', user.username);
@@ -79,7 +76,6 @@ class AuthLocal extends AuthEntity {
     String? currentUser = bo.get('currentUser');
     if (currentUser != null) {
       Map<dynamic, dynamic> usr = bo.get(currentUser);
-      print(usr);
       return User.fromMap(usr);
     }
     return null;
