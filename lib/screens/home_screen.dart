@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:shreeantu_tea/data/usecases/auth_local.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    checkloginstate();
+  }
+
+  checkloginstate() async {
+    final instance = AuthLocal();
+    if (await instance.user == null) {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppRouter.loginRoute);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
