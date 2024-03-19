@@ -4,10 +4,10 @@ class AppColors {
 
   AppColors._();
 
-  static const primaryColor = Color.fromARGB(255, 8, 255, 20);
+  static const primaryColor = Color(0xff00bb45);
 
-  static Color backgroundColor =  Colors.grey.shade300;
+  static Color backgroundColor =  Colors.white;
 
-  static const primaryContainer = Colors.white;
+  static Color primaryContainer = Colors.grey.shade200;
 
 }
