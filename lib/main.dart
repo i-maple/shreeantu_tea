@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 
 void main() {
@@ -10,13 +12,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green, primary: Colors.green, secondary: Colors.lightGreen),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => QualityGrade(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.green,
+            primary: Colors.green,
+            secondary: Colors.lightGreen,
+          ),
+          useMaterial3: true,
+        ),
+        routes: AppRouter.routes,
+        initialRoute: AppRouter.initialRoute,
       ),
-      routes: AppRouter.routes,
-      initialRoute: AppRouter.initialRoute,
     );
   }
 }

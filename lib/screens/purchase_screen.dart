@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart' as picker;
+import 'package:provider/provider.dart';
+import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
+import 'package:velocity_x/velocity_x.dart';
+
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
-import 'package:shreeantu_tea/widgets/primary_button.dart';
-import 'package:velocity_x/velocity_x.dart';
+
+import '../model/data_entry.dart';
+import '../widgets/data_entry_form.dart';
+import '../widgets/main.dart';
 
 class PurchaseScreen extends StatefulWidget {
   const PurchaseScreen({super.key});
@@ -20,56 +25,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       _billNumberController,
       _amountController;
 
-  picker.NepaliDateTime? dateController;
-
   resetFields() {
     _nameController.clear();
     _quantityController.clear();
     _billNumberController.clear();
     _amountController.clear();
-    setState(() {
-      dateController = null;
-    });
-  }
-
-  addPurchase() async {
-    if (_nameController.text.isNotEmptyAndNotNull ||
-        _quantityController.text.isNotEmptyAndNotNull ||
-        _billNumberController.text.isNotEmptyAndNotNull ||
-        _amountController.text.isNotEmptyAndNotNull ||
-        dateController != null) {
-      if (double.tryParse(_quantityController.text) == null ||
-          double.tryParse(_amountController.text) == null) {
-        SnackbarService.showFailedSnackbar(
-          context,
-          'Amount or quantity should be number',
-        );
-        return;
-      }
-      Purchase data = Purchase(
-        id: '1',
-        name: _nameController.text,
-        date: dateController!,
-        quantity: double.parse(_quantityController.text),
-        amount: double.parse(_amountController.text),
-        billNumber: _billNumberController.text,
-      );
-
-      String response = await DataLocal.instance.addPurchase(data: data);
-      if (mounted) {
-        if (response == 'success') {
-          SnackbarService.showSuccessSnackbar(
-              context, 'Successfully Added Purchase');
-          resetFields();
-        } else {
-          SnackbarService.showFailedSnackbar(context, response);
-        }
-      }
-    }
-    if (mounted) {
-      SnackbarService.showFailedSnackbar(context, 'No fields can be empty');
-    }
-    return;
+    Provider.of<QualityGrade>(context).date = null;
+    Provider.of<QualityGrade>(context).currentValue = null;
   }
 
   @override
@@ -90,10 +52,77 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     _billNumberController.dispose();
   }
 
+  addPurchase() async {
+    final prov = Provider.of<QualityGrade>(context, listen: false);
+    if (_nameController.text.isNotEmptyAndNotNull &&
+        _quantityController.text.isNotEmptyAndNotNull &&
+        _billNumberController.text.isNotEmptyAndNotNull &&
+        _amountController.text.isNotEmptyAndNotNull &&
+        prov.currentValue != null &&
+        prov.date != null) {
+      if (double.tryParse(_quantityController.text) == null ||
+          double.tryParse(_amountController.text) == null) {
+        SnackbarService.showFailedSnackbar(
+          context,
+          'Amount or quantity should be number',
+        );
+        return;
+      }
+      Purchase data = Purchase(
+        name: _nameController.text,
+        date: prov.date!,
+        quantity: double.parse(_quantityController.text),
+        amount: double.parse(_amountController.text),
+        billNumber: _billNumberController.text,
+        qualityGrade: prov.currentValue!,
+      );
+
+      String response = await DataLocal.instance.addPurchase(data: data);
+      if (mounted) {
+        if (response == 'success') {
+          SnackbarService.showSuccessSnackbar(
+              context, 'Successfully Added Purchase');
+          resetFields();
+        } else {
+          SnackbarService.showFailedSnackbar(context, response);
+        }
+      }
+    }
+    if (mounted) {
+      SnackbarService.showFailedSnackbar(context, 'No fields can be empty');
+    }
+    return;
+  }
+
+  get fields => [
+        DataEntry(
+          hint: 'Date',
+          needDate: true,
+        ),
+        DataEntry(
+          hint: 'Bill Number',
+          textController: _billNumberController,
+        ),
+        DataEntry(
+          hint: 'Name',
+          textController: _nameController,
+        ),
+        DataEntry(
+          hint: 'Quantity',
+          textController: _quantityController,
+        ),
+        DataEntry(
+          hint: 'Amount',
+          textController: _amountController,
+        ),
+        DataEntry(
+          hint: 'Quality Grade',
+          dropdownValues: ['A', 'B', 'C'],
+        )
+      ];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print(size.width);
     return Scaffold(
       appBar: AppBar(
         title: MediaQuery.sizeOf(context).width > 600
@@ -104,8 +133,20 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       ),
       body: size.width > 1190
           ? VxTwoRow(
-              left: _dataTableColumn(),
-              right: _dataEntryForm().expand(),
+              left: SizedBox(
+                width: 920,
+                child: LedgerWidget(
+                  future: DataLocal.instance.getAllPurchases(),
+                  headers: [
+                    ...Purchase.props,
+                    'Total',
+                  ],
+                ),
+              ),
+              right: DataEntryForm(
+                fields: fields,
+                onSubmit: addPurchase,
+              ).expand(),
             )
           : _tabbed(),
     );
@@ -129,119 +170,25 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           Expanded(
             child: TabBarView(
               children: [
-                _dataTableColumn(),
-                _dataEntryForm(),
+                SizedBox(
+                  width: 920,
+                  child: LedgerWidget(
+                    future: DataLocal.instance.getAllPurchases(),
+                    headers: [
+                      ...Purchase.props,
+                      'Total',
+                    ],
+                  ),
+                ),
+                DataEntryForm(
+                  fields: fields,
+                  onSubmit: addPurchase,
+                )
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  Widget _dataEntryForm() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        'Please Add Your Expense'.text.bold.size(16).make().py20(),
-        ListTile(
-          title: (dateController == null
-                  ? 'Select Date'
-                  : dateController!.format('y/M/d'))
-              .text
-              .semiBold
-              .size(16)
-              .make(),
-          onTap: () async {
-            picker.NepaliDateTime? pickedDate =
-                await picker.showMaterialDatePicker(
-              context: context,
-              initialDate: picker.NepaliDateTime.now(),
-              firstDate: picker.NepaliDateTime(2078),
-              lastDate: picker.NepaliDateTime(2085),
-            );
-            if (pickedDate != null) {
-              setState(() {
-                dateController = pickedDate;
-              });
-            }
-          },
-        ).color(Colors.grey.shade300.withOpacity(0.8)).py8(),
-        VxTextField(
-          hint: 'Bill Number',
-          contentPaddingLeft: 20,
-          controller: _billNumberController,
-        ).py8(),
-        VxTextField(
-          hint: 'Name Of Farmer',
-          contentPaddingLeft: 20,
-          controller: _nameController,
-        ).py8(),
-        VxTextField(
-          hint: 'Quantity',
-          contentPaddingLeft: 20,
-          controller: _quantityController,
-        ).py8(),
-        VxTextField(
-          hint: 'Amount',
-          contentPaddingLeft: 20,
-          controller: _amountController,
-        ).py8(),
-        PrimaryButton(
-          onTap: addPurchase,
-          color: Colors.green,
-          child:
-              'Add'.text.size(16).bold.color(AppColors.primaryTextColor).make(),
-        ).py12()
-      ],
-    ).p20();
-  }
-
-  Widget _dataTableColumn() {
-    return FutureBuilder(
-        future: DataLocal.instance.getAllPurchases(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              var datas = snapshot.data;
-              List<List<String>> lists = [];
-              for (var data in datas!) {
-                List<String> subList = [];
-                subList.add(data['id']);
-                subList.add(data['name']);
-                subList.add(data['date'].toString());
-                subList.add(data['quantity'].toString());
-                subList.add(data['amount'].toString());
-                subList.add((data['amount'] * data['quantity']).toString());
-                subList.add(data['billNumber'] ?? '');
-                lists.add(subList);
-              }
-              return DataTable(
-                columns: [...Purchase.props, 'Total', 'Action']
-                    .map(
-                      (e) => DataColumn(
-                        label: Text(e.toUpperCase()),
-                        tooltip: e,
-                      ),
-                    )
-                    .toList(),
-                rows: lists
-                    .map((e) => DataRow(
-                          cells: e
-                              .map(
-                                (e) => DataCell(
-                                  Text(e.toString()),
-                                ),
-                              )
-                              .toList(),
-                        ))
-                    .toList(),
-              ).scrollHorizontal().scrollVertical().p20();
-            } else {
-              return 'No Datas Yet'.text.make();
-            }
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
   }
 }
