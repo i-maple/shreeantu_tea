@@ -10,4 +10,6 @@ class AppColors {
 
   static Color primaryContainer = Colors.grey.shade200;
 
+  static Color primaryTextColor = Colors.white;
+
 }

@@ -9,9 +9,9 @@ class HiveDb {
 
   HiveDb._internal();
 
-  Future<Box> box() async {
+  Future<Box> box(String boxName) async {
     await Hive.initFlutter();
-    Box box = await Hive.openBox('users');
+    Box box = await Hive.openBox(boxName);
     return box;
   }
 }

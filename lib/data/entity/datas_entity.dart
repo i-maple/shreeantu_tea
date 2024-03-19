@@ -1,20 +1,20 @@
 import 'package:shreeantu_tea/model/purchase_model.dart';
 
 abstract class DatasEntity {
-  String addPurchase({
+  Future<String> addPurchase({
     required Purchase data,
   });
 
-  String addSale({
+  Future<String> addSale({
     required Map data,
   });
 
-  String addExpense({
+  Future<String> addExpense({
     required Map data,
     required String type,
   });
 
-  String addInsurance({
+  Future<String> addInsurance({
     required Map data,
   });
 }

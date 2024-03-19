@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shreeantu_tea/data/usecases/auth_local.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
+import 'package:shreeantu_tea/widgets/primary_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -116,25 +116,17 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(
           height: 10,
         ),
-        GestureDetector(
+        PrimaryButton(
           onTap: login,
-          child: Container(
-            width: double.infinity,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-                child: 'Login'
-                    .text
-                    .bold
-                    .size(16)
-                    .color(Colors.white)
-                    .center
-                    .make()),
-          ),
-        )
+          color: AppColors.primaryColor,
+          child: 'Login'
+              .text
+              .bold
+              .size(16)
+              .color(AppColors.primaryTextColor)
+              .center
+              .make(),
+        ),
       ],
     ).pSymmetric(h: 20).centered();
   }

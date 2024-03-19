@@ -14,7 +14,6 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
@@ -54,9 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: logout,
             icon: const Icon(Icons.logout),
             label: 'Logout'.text.make(),
+            style: ButtonStyle(
+              backgroundColor:
+                  const MaterialStatePropertyAll(AppColors.primaryColor),
+              foregroundColor:
+                  MaterialStatePropertyAll(AppColors.primaryTextColor),
+            ),
           )
         ],
-        backgroundColor: AppColors.primaryColor,
       ),
       drawer: Drawer(
         child: Column(
@@ -85,13 +89,20 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.backgroundColor,
       body: GridView(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
+          maxCrossAxisExtent: 300,
           mainAxisSpacing: 60,
           crossAxisSpacing: 60,
         ),
         children: listOfObjects
-            .map((e) => _clickableHomeBox(context,
-                text: e.title, icon: e.icon, route: e.route))
+            .map((e) => GestureDetector(
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    e.route,
+                    arguments: e.args,
+                  ),
+                  child: _clickableHomeBox(context,
+                      text: e.title, icon: e.icon, route: e.route),
+                ))
             .toList(),
       ).p20(),
     );
@@ -102,27 +113,15 @@ class _HomeScreenState extends State<HomeScreen> {
       required Widget icon,
       required String route,
       Object? args}) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        route,
-        arguments: args,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon,
-          const SizedBox(
-            height: 10,
-          ),
-          text.text.center.make(),
-        ],
-      ),
-    )
-        .color(AppColors.primaryContainer)
-        .p8()
-        .box
-        .neumorphic(color: Colors.white12)
-        .make();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        icon,
+        const SizedBox(
+          height: 10,
+        ),
+        text.text.bold.size(16).center.make(),
+      ],
+    ).color(AppColors.primaryContainer).p8().box.make();
   }
 }

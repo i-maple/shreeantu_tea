@@ -8,7 +8,7 @@ class Purchase {
   NepaliDateTime date;
   double quantity;
   double amount;
-  String farmersUid;
+  String billNumber;
 
   Purchase({
     required this.id,
@@ -16,8 +16,16 @@ class Purchase {
     required this.date,
     required this.quantity,
     required this.amount,
-    required this.farmersUid,
+    required this.billNumber,
   });
+
+  static List<String> get props => [
+        'id',
+        'name',
+        'date',
+        'quantity',
+        'amount',
+      ];
 
   Purchase copyWith({
     String? id,
@@ -25,7 +33,7 @@ class Purchase {
     NepaliDateTime? date,
     double? quantity,
     double? amount,
-    String? farmersUid,
+    String? billNumber,
   }) {
     return Purchase(
       id: id ?? this.id,
@@ -33,7 +41,7 @@ class Purchase {
       date: date ?? this.date,
       quantity: quantity ?? this.quantity,
       amount: amount ?? this.amount,
-      farmersUid: farmersUid ?? this.farmersUid,
+      billNumber: billNumber ?? this.billNumber,
     );
   }
 
@@ -41,10 +49,10 @@ class Purchase {
     return {
       'id': id,
       'name': name,
-      'date': date,
+      'date': date.format('y-M-d'),
       'quantity': quantity,
       'amount': amount,
-      'farmersUid': farmersUid,
+      'billNumber': billNumber,
     };
   }
 
@@ -55,7 +63,7 @@ class Purchase {
       date: map['date'],
       quantity: map['quantity']?.toDouble() ?? 0.0,
       amount: map['amount']?.toDouble() ?? 0.0,
-      farmersUid: map['farmersUid'] ?? '',
+      billNumber: map['billNumber'] ?? '',
     );
   }
 
@@ -66,7 +74,7 @@ class Purchase {
 
   @override
   String toString() {
-    return 'Purchase(id: $id, name: $name, date: $date, quantity: $quantity, amount: $amount, farmersUid: $farmersUid)';
+    return 'Purchase(id: $id, name: $name, date: $date, quantity: $quantity, amount: $amount, billNumber: $billNumber)';
   }
 
   @override
@@ -79,7 +87,7 @@ class Purchase {
         other.date == date &&
         other.quantity == quantity &&
         other.amount == amount &&
-        other.farmersUid == farmersUid;
+        other.billNumber == billNumber;
   }
 
   @override
@@ -89,6 +97,6 @@ class Purchase {
         date.hashCode ^
         quantity.hashCode ^
         amount.hashCode ^
-        farmersUid.hashCode;
+        billNumber.hashCode;
   }
 }

@@ -5,7 +5,7 @@ import 'package:shreeantu_tea/db/hive_offline_db.dart';
 import 'package:shreeantu_tea/model/user_model.dart';
 
 class AuthLocal extends AuthEntity {
-  Future<Box> get _box async => HiveDb().box();
+  Future<Box> get _box async => HiveDb().box('users');
 
   static final instance = AuthLocal._internal();
 
