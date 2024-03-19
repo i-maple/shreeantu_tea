@@ -10,7 +10,7 @@ import 'package:shreeantu_tea/utils/snackbar_service.dart';
 
 import '../model/data_entry.dart';
 import '../widgets/data_entry_form.dart';
-import '../widgets/main.dart';
+import '../widgets/ledger_widget.dart';
 
 class PurchaseScreen extends StatefulWidget {
   const PurchaseScreen({super.key});
