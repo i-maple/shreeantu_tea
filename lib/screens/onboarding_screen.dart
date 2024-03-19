@@ -12,15 +12,20 @@ class OnboardingScreen extends StatelessWidget {
       body: FutureBuilder(
           future: AuthLocal.instance.isFirstTime,
           builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.done && snap.hasData) {
-              Future.delayed(Duration.zero, () {
-                bool isFirstTime = snap.data!;
-                if (isFirstTime) {
-                  return const RegisterScreen();
-                } else {
-                  Navigator.pushReplacementNamed(context, AppRouter.homeRoute);
-                }
-              });
+            if (snap.connectionState == ConnectionState.done) {
+              if (snap.hasData) {
+                Future.delayed(Duration.zero, () {
+                  bool isFirstTime = snap.data!;
+                  if (isFirstTime) {
+                    return const RegisterScreen();
+                  } else {
+                    Navigator.pushReplacementNamed(
+                        context, AppRouter.homeRoute);
+                  }
+                });
+              } else {
+                return const RegisterScreen();
+              }
             }
             return const Center(
               child: CircularProgressIndicator(),
