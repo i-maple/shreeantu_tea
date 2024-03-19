@@ -14,15 +14,12 @@ class OnboardingScreen extends StatelessWidget {
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
               if (snap.hasData) {
-                Future.delayed(Duration.zero, () {
-                  bool isFirstTime = snap.data!;
-                  if (isFirstTime) {
-                    return const RegisterScreen();
-                  } else {
-                    Navigator.pushReplacementNamed(
-                        context, AppRouter.homeRoute);
-                  }
-                });
+                bool isFirstTime = snap.data!;
+                if (isFirstTime) {
+                  return const RegisterScreen();
+                } else {
+                  Navigator.pushReplacementNamed(context, AppRouter.homeRoute);
+                }
               } else {
                 return const RegisterScreen();
               }
