@@ -19,7 +19,7 @@ jobs:
 
       - run: flutter clean
       - run: flutter pub get
-      - run: flutter build web --release --web-renderer html --base-href /./
+      - run: flutter build web --release --web-renderer html --base-href /test/
 
       # Web deploy now is contained in build/web directory
       - run: |
