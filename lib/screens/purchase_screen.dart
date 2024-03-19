@@ -92,6 +92,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    print(size.width);
     return Scaffold(
       appBar: AppBar(
         title: MediaQuery.sizeOf(context).width > 600
@@ -100,36 +102,39 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
       ),
-      body: VxResponsive(
-        medium: VxTwoRow(
-          left: _dataTableColumn(),
-          right: _dataEntryForm().expand(),
-        ),
-        xsmall: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              const TabBar(
-                tabs: [
-                  Tab(
-                    text: 'View Data Table',
-                  ),
-                  Tab(
-                    text: 'Add New Entry',
-                  ),
-                ],
+      body: size.width > 1190
+          ? VxTwoRow(
+              left: _dataTableColumn(),
+              right: _dataEntryForm().expand(),
+            )
+          : _tabbed(),
+    );
+  }
+
+  _tabbed() {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const TabBar(
+            tabs: [
+              Tab(
+                text: 'View Data Table',
               ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    _dataTableColumn(),
-                    _dataEntryForm(),
-                  ],
-                ),
+              Tab(
+                text: 'Add New Entry',
               ),
             ],
           ),
-        ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _dataTableColumn(),
+                _dataEntryForm(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
