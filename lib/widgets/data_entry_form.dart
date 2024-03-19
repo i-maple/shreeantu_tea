@@ -20,7 +20,7 @@ class DataEntryForm extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        'Please Add Your Expense'.text.bold.size(16).make().py20(),
+        'Data Entry'.text.bold.size(16).make().py20(),
         ...fields.map(
           (e) {
             if (e.textController != null) {
