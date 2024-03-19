@@ -6,13 +6,14 @@ class User {
   String? phone;
   String? email;
   String role;
-
+  String uid;
   User({
     required this.name,
     required this.username,
     this.phone,
     this.email,
     required this.role,
+    required this.uid,
   });
 
   User copyWith({
@@ -21,6 +22,7 @@ class User {
     String? phone,
     String? email,
     String? role,
+    String? uid,
   }) {
     return User(
       name: name ?? this.name,
@@ -28,16 +30,18 @@ class User {
       phone: phone ?? this.phone,
       email: email ?? this.email,
       role: role ?? this.role,
+      uid: uid ?? this.uid,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<dynamic, dynamic> toMap() {
     return {
       'name': name,
       'username': username,
       'phone': phone,
       'email': email,
       'role': role,
+      'uid': uid,
     };
   }
 
@@ -48,6 +52,7 @@ class User {
       phone: map['phone'],
       email: map['email'],
       role: map['role'] ?? '',
+      uid: map['uid'] ?? '',
     );
   }
 
@@ -57,7 +62,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(name: $name, username: $username, phone: $phone, email: $email, role: $role)';
+    return 'User(name: $name, username: $username, phone: $phone, email: $email, role: $role, uid: $uid)';
   }
 
   @override
@@ -69,7 +74,8 @@ class User {
       other.username == username &&
       other.phone == phone &&
       other.email == email &&
-      other.role == role;
+      other.role == role &&
+      other.uid == uid;
   }
 
   @override
@@ -78,6 +84,7 @@ class User {
       username.hashCode ^
       phone.hashCode ^
       email.hashCode ^
-      role.hashCode;
+      role.hashCode ^
+      uid.hashCode;
   }
 }

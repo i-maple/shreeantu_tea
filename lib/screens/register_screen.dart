@@ -45,11 +45,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   register() async {
     final auth = AuthLocal.instance;
     User user = User(
-        name: _nameController.text,
-        username: _usernameController.text,
-        role: _roleController.text,
-        phone: _phoneController.text,
-        email: _emailController.text);
+      name: _nameController.text,
+      username: _usernameController.text,
+      role: _roleController.text,
+      phone: _phoneController.text,
+      email: _emailController.text,
+      uid: DateTime.now().millisecondsSinceEpoch.toString(),
+    );
     String register =
         await auth.register(user: user, password: _passwordController.text);
     if (register == 'success') {

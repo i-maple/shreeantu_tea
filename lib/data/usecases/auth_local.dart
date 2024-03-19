@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shreeantu_tea/data/entity/auth_entity.dart';
 import 'package:shreeantu_tea/db/hive_offline_db.dart';
 import 'package:shreeantu_tea/model/user_model.dart';
@@ -45,20 +46,24 @@ class AuthLocal extends AuthEntity {
         return 'Role Cannot be empty';
       }
       Map infoMap = {
+        'uid': user.uid,
         'username': user.username,
         'password': password,
         'name': user.name,
         'role': user.role,
         'phone': user.phone,
         'email': user.email,
-        'createdAt': DateTime.now(),
+        'createdAt': NepaliDateTime.now(),
         'createdBy': user,
       };
+
       await bo.put(user.username, infoMap);
-      await bo.put('currentUser', user.username);
+
+      if (bo.get('currentUser') == null) {
+        await bo.put('currentUser', user.username);
+      }
       return 'success';
     } catch (e) {
-      print(e.toString());
       return 'fail';
     }
   }

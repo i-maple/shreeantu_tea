@@ -1,6 +1,8 @@
+import 'package:shreeantu_tea/model/purchase_model.dart';
+
 abstract class DatasEntity {
   String addPurchase({
-    required Map data,
+    required Purchase data,
   });
 
   String addSale({
