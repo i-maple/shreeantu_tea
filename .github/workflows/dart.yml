@@ -19,7 +19,7 @@ jobs:
           git config --global user.email nishantyt0@gmail.com
           git config --global user.name nishant
           git status
-          git remote add origin https://github.com/i-maple/shreeantu_live.git
+          git remote add origin https://${{secrets.USER_SECRETS}}@github.com/i-maple/shreeantu_tea.git
           git checkout -b gh-pages
           git add --all
           git commit -m "update"
