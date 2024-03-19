@@ -15,7 +15,7 @@ class AuthLocal extends AuthEntity {
       {required String username, required String password}) async {
     try {
       Box bo = await _box;
-      Map<String, String>? detailsInMap = bo.get(username);
+      Map<dynamic, dynamic>? detailsInMap = bo.get(username);
       if (detailsInMap != null && detailsInMap['password'] == password) {
         await bo.put('currentUser', username);
         return 'success';
