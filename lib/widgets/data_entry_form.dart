@@ -5,6 +5,7 @@ import 'package:shreeantu_tea/model/data_entry.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/widgets/primary_button.dart';
+import 'package:shreeantu_tea/widgets/search_dropdown.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class DataEntryForm extends StatelessWidget {
@@ -51,6 +52,8 @@ class DataEntryForm extends StatelessWidget {
                   }
                 },
               ).color(Colors.grey.shade300.withOpacity(0.8)).py8();
+            } else if (e.searchDropdown) {
+              return const SearchDropdown();
             } else {
               return ListTile(
                 title: DropdownButton(

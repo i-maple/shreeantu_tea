@@ -30,13 +30,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     _quantityController.clear();
     _billNumberController.clear();
     _amountController.clear();
-    Provider.of<QualityGrade>(context).date = null;
-    Provider.of<QualityGrade>(context).currentValue = null;
+    Provider.of<QualityGrade>(context, listen: false).reset();
   }
 
   @override
   void initState() {
     super.initState();
+
     _nameController = TextEditingController();
     _quantityController = TextEditingController();
     _billNumberController = TextEditingController();
@@ -54,8 +54,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
 
   addPurchase() async {
     final prov = Provider.of<QualityGrade>(context, listen: false);
-    if (_nameController.text.isNotEmptyAndNotNull &&
-        _quantityController.text.isNotEmptyAndNotNull &&
+    if (prov.currentFarmer == null) {
+      SnackbarService.showFailedSnackbar(
+        context,
+        'Select a Farmer',
+      );
+    }
+    if (_quantityController.text.isNotEmptyAndNotNull &&
         _billNumberController.text.isNotEmptyAndNotNull &&
         _amountController.text.isNotEmptyAndNotNull &&
         prov.currentValue != null &&
@@ -69,7 +74,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         return;
       }
       Purchase data = Purchase(
-        name: _nameController.text,
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: prov.currentFarmer!,
         date: prov.date!,
         quantity: double.parse(_quantityController.text),
         amount: double.parse(_amountController.text),
@@ -94,32 +100,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return;
   }
 
-  get fields => [
-        DataEntry(
-          hint: 'Date',
-          needDate: true,
-        ),
-        DataEntry(
-          hint: 'Bill Number',
-          textController: _billNumberController,
-        ),
-        DataEntry(
-          hint: 'Name',
-          textController: _nameController,
-        ),
-        DataEntry(
-          hint: 'Quantity',
-          textController: _quantityController,
-        ),
-        DataEntry(
-          hint: 'Amount',
-          textController: _amountController,
-        ),
-        DataEntry(
-          hint: 'Quality Grade',
-          dropdownValues: ['A', 'B', 'C'],
-        )
-      ];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -137,16 +117,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 width: 920,
                 child: LedgerWidget(
                   future: DataLocal.instance.getAllPurchases(),
-                  headers: [
-                    ...Purchase.props,
-                    'Total',
-                  ],
+                  headers: Purchase.props,
                 ),
               ),
-              right: DataEntryForm(
-                fields: fields,
-                onSubmit: addPurchase,
-              ).expand(),
+              right: _dataEntryMethod(),
             )
           : _tabbed(),
     );
@@ -174,21 +148,47 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   width: 920,
                   child: LedgerWidget(
                     future: DataLocal.instance.getAllPurchases(),
-                    headers: [
-                      ...Purchase.props,
-                      'Total',
-                    ],
+                    headers: Purchase.props,
                   ),
                 ),
-                DataEntryForm(
-                  fields: fields,
-                  onSubmit: addPurchase,
-                )
+                _dataEntryMethod(),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _dataEntryMethod() {
+    return DataEntryForm(
+      fields: [
+        DataEntry(
+          hint: 'Date',
+          needDate: true,
+        ),
+        DataEntry(
+          hint: 'Bill Number',
+          textController: _billNumberController,
+        ),
+        DataEntry(
+          hint: 'Name',
+          searchDropdown: true,
+        ),
+        DataEntry(
+          hint: 'Quantity',
+          textController: _quantityController,
+        ),
+        DataEntry(
+          hint: 'Amount',
+          textController: _amountController,
+        ),
+        DataEntry(
+          hint: 'Quality Grade',
+          dropdownValues: ['A', 'B', 'C'],
+        )
+      ],
+      onSubmit: addPurchase,
+    ).expand();
   }
 }

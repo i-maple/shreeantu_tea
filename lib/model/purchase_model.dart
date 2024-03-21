@@ -2,101 +2,113 @@ import 'dart:convert';
 
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
+import 'package:shreeantu_tea/model/farmers_model.dart';
+
 class Purchase {
-  String name;
+  String billNumber;
   NepaliDateTime date;
+  Farmer name;
+  String qualityGrade;
   double quantity;
   double amount;
-  String billNumber;
-  String qualityGrade;
-
+  String id;
   Purchase({
-    required this.name,
+    required this.billNumber,
     required this.date,
+    required this.name,
+    required this.qualityGrade,
     required this.quantity,
     required this.amount,
-    required this.billNumber,
-    required this.qualityGrade,
+    required this.id,
   });
+  double get total => amount * quantity;
 
   static List<String> get props => [
-        'Name',
+        'Bill Number',
         'Date',
+        'Name',
+        'Grade',
         'Quantity',
         'Amount',
-        'Bill Number',
-        'Grade',
+        'Total',
       ];
 
   Purchase copyWith({
-    String? name,
+    String? billNumber,
     NepaliDateTime? date,
+    Farmer? name,
+    String? qualityGrade,
     double? quantity,
     double? amount,
-    String? billNumber,
-    String? qualityGrade,
+    String? id,
   }) {
     return Purchase(
-      name: name ?? this.name,
+      billNumber: billNumber ?? this.billNumber,
       date: date ?? this.date,
+      name: name ?? this.name,
+      qualityGrade: qualityGrade ?? this.qualityGrade,
       quantity: quantity ?? this.quantity,
       amount: amount ?? this.amount,
-      billNumber: billNumber ?? this.billNumber,
-      qualityGrade: qualityGrade ?? this.qualityGrade,
+      id: id ?? this.id,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'billNumber': billNumber,
       'date': date.format('y-M-d').toString(),
+      'name': name.toMap(),
+      'qualityGrade': qualityGrade,
       'quantity': quantity,
       'amount': amount,
-      'billNumber': billNumber,
-      'qualityGrade': qualityGrade,
+      'id': id,
     };
   }
 
   factory Purchase.fromMap(Map<String, dynamic> map) {
     return Purchase(
-      name: map['name'] ?? '',
+      billNumber: map['billNumber'] ?? '',
       date: map['date'],
+      name: Farmer.fromMap(map['name']),
+      qualityGrade: map['qualityGrade'] ?? '',
       quantity: map['quantity']?.toDouble() ?? 0.0,
       amount: map['amount']?.toDouble() ?? 0.0,
-      billNumber: map['billNumber'] ?? '',
-      qualityGrade: map['qualityGrade'] ?? '',
+      id: map['id'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Purchase.fromJson(String source) => Purchase.fromMap(json.decode(source));
+  factory Purchase.fromJson(String source) =>
+      Purchase.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Purchase(name: $name, date: $date, quantity: $quantity, amount: $amount, billNumber: $billNumber, qualityGrade: $qualityGrade)';
+    return 'Purchase(billNumber: $billNumber, date: $date, name: $name, qualityGrade: $qualityGrade, quantity: $quantity, amount: $amount, id: $id)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Purchase &&
-      other.name == name &&
-      other.date == date &&
-      other.quantity == quantity &&
-      other.amount == amount &&
-      other.billNumber == billNumber &&
-      other.qualityGrade == qualityGrade;
+        other.billNumber == billNumber &&
+        other.date == date &&
+        other.name == name &&
+        other.qualityGrade == qualityGrade &&
+        other.quantity == quantity &&
+        other.amount == amount &&
+        other.id == id;
   }
 
   @override
   int get hashCode {
-    return name.hashCode ^
-      date.hashCode ^
-      quantity.hashCode ^
-      amount.hashCode ^
-      billNumber.hashCode ^
-      qualityGrade.hashCode;
+    return billNumber.hashCode ^
+        date.hashCode ^
+        name.hashCode ^
+        qualityGrade.hashCode ^
+        quantity.hashCode ^
+        amount.hashCode ^
+        id.hashCode;
   }
 }

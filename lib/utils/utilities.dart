@@ -3,6 +3,12 @@ import 'package:shreeantu_tea/model/home_item_model.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 
 List<HomeItemModel> listOfObjects = [
+
+  HomeItemModel(
+    title: 'Farmer Details',
+    icon: const FaIcon(FontAwesomeIcons.cartArrowDown),
+    route: AppRouter.allFarmerRoute,
+  ),
   HomeItemModel(
     title: 'Purchase',
     icon: const FaIcon(FontAwesomeIcons.cartArrowDown),

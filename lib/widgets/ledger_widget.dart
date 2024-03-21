@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LedgerWidget extends StatelessWidget {
@@ -15,25 +14,25 @@ class LedgerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: DataLocal.instance.getAllPurchases(),
+        future: future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               var datas = snapshot.data;
+              print("flag $datas" );
               List<List<String>> lists = [];
               for (Map<dynamic, dynamic> data in datas!) {
                 lists.add(
-                  [
-                    ...data.values.map((e) => e.toString()),
-                    (data['quantity'] * data['amount']).toString(),
-                  ],
+                  data.values.map((e) => e.toString()).toList(),
                 );
               }
               return DataTable(
                 columns: headers
                     .map(
                       (e) => DataColumn(
-                        label: Text(e.toUpperCase()),
+                        label: Text(
+                          e.toUpperCase(),
+                        ),
                         tooltip: e,
                       ),
                     )
@@ -43,7 +42,9 @@ class LedgerWidget extends StatelessWidget {
                           cells: e
                               .map(
                                 (e) => DataCell(
-                                  Text(e.toString()),
+                                  Text(
+                                    e.toString(),
+                                  ),
                                 ),
                               )
                               .toList(),
