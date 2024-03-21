@@ -28,7 +28,16 @@ class DataLocal extends DatasEntity {
   Future<String> addPurchase({required Purchase data}) async {
     try {
       final bo = await _purchaseBox;
+      final farmersBo = await _farmerBox;
       await bo.put(data.id, data.toMap());
+      await farmersBo.put('transactions', {
+        'id': data.id,
+        'billNumber': data.billNumber,
+        'date': data.date,
+        'quantity': data.quantity,
+        'amount': data.amount,
+        'qualityGrade': data.qualityGrade,
+      });
       return 'success';
     } catch (e) {
       return e.toString();
@@ -39,6 +48,7 @@ class DataLocal extends DatasEntity {
     final bo = await _purchaseBox;
     return bo.values
         .map((e) => {
+              'id': e['id'],
               'billNumber': e['billNumber'],
               'date': e['date'],
               'name': e['name']['name'],
@@ -54,7 +64,6 @@ class DataLocal extends DatasEntity {
     try {
       final bo = await box;
       List<dynamic>? allValuesInBox = bo.values.toList();
-      print(allValuesInBox);
       return allValuesInBox;
     } catch (e) {
       return [

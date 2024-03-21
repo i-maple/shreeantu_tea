@@ -38,6 +38,7 @@ class _AllFarmerScreenState extends State<AllFarmerScreen> {
       if (mounted) {
         SnackbarService.showFailedSnackbar(context, 'Name Cannot be empty');
       }
+      return;
     }
     Farmer farmer = Farmer(
       name: _nameController.text,
@@ -50,10 +51,13 @@ class _AllFarmerScreenState extends State<AllFarmerScreen> {
         SnackbarService.showSuccessSnackbar(
             context, 'Successfully Added Farmer. Refresh to see changes');
         setState(() {
-          future = DataLocal.instance.getAllFarmers();
+          future = DataLocal.instance.getAllFarmersAsMap();
         });
+        _nameController.clear();
+        return;
       } else {
         SnackbarService.showFailedSnackbar(context, response);
+        return;
       }
     }
   }

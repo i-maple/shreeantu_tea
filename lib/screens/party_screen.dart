@@ -25,8 +25,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       _billNumberController,
       _amountController;
 
-  Future future = DataLocal.instance.getAllPurchases();
-
   resetFields() {
     _nameController.clear();
     _quantityController.clear();
@@ -90,9 +88,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         if (response == 'success') {
           SnackbarService.showSuccessSnackbar(
               context, 'Successfully Added Purchase');
-          setState(() {
-            future = DataLocal.instance.getAllPurchases();
-          });
           resetFields();
           return;
         } else {
@@ -123,11 +118,11 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               left: SizedBox(
                 width: 920,
                 child: LedgerWidget(
-                  future: future,
+                  future: DataLocal.instance.getAllPurchases(),
                   headers: Purchase.props,
                 ),
               ),
-              right: _dataEntryMethod().expand(),
+              right: _dataEntryMethod(),
             )
           : _tabbed(),
     );
@@ -154,7 +149,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 SizedBox(
                   width: 920,
                   child: LedgerWidget(
-                    future: future,
+                    future: DataLocal.instance.getAllPurchases(),
                     headers: Purchase.props,
                   ),
                 ),
@@ -196,6 +191,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         )
       ],
       onSubmit: addPurchase,
-    );
+    ).expand();
   }
 }

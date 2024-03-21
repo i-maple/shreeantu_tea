@@ -21,9 +21,11 @@ class Purchase {
     required this.amount,
     required this.id,
   });
+
   double get total => amount * quantity;
 
   static List<String> get props => [
+        'ID',
         'Bill Number',
         'Date',
         'Name',
@@ -55,13 +57,14 @@ class Purchase {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'billNumber': billNumber,
       'date': date.format('y-M-d').toString(),
       'name': name.toMap(),
       'qualityGrade': qualityGrade,
       'quantity': quantity,
       'amount': amount,
-      'id': id,
+      'total': total,
     };
   }
 
