@@ -6,7 +6,7 @@ class DataEntry {
   final List<String>? dropdownValues;
   final bool needDate;
   final String hint;
-  final bool searchDropdown; 
+  final String? searchDropdownType; 
   final List<Object>? searchDropdownFields;
 
   DataEntry({
@@ -15,7 +15,7 @@ class DataEntry {
     this.dropdownValues,
     this.needDate = false,
     required this.hint,
-    this.searchDropdown = false,
+    this.searchDropdownType,
     this.searchDropdownFields,
   });
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shreeantu_tea/model/party_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
-import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
 
@@ -12,24 +12,22 @@ import '../model/data_entry.dart';
 import '../widgets/data_entry_form.dart';
 import '../widgets/ledger_widget.dart';
 
-class PurchaseScreen extends StatefulWidget {
-  const PurchaseScreen({super.key});
+class PartyScreen extends StatefulWidget {
+  const PartyScreen({super.key});
 
   @override
-  State<PurchaseScreen> createState() => _PurchaseScreenState();
+  State<PartyScreen> createState() => _PartyScreenState();
 }
 
-class _PurchaseScreenState extends State<PurchaseScreen> {
+class _PartyScreenState extends State<PartyScreen> {
   late TextEditingController _nameController,
-      _quantityController,
-      _billNumberController,
-      _amountController;
+      _phoneController,
+      _countryController;
 
   resetFields() {
     _nameController.clear();
-    _quantityController.clear();
-    _billNumberController.clear();
-    _amountController.clear();
+    _phoneController.clear();
+    _countryController.clear();
     Provider.of<QualityGrade>(context, listen: false).reset();
   }
 
@@ -38,57 +36,35 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     super.initState();
 
     _nameController = TextEditingController();
-    _quantityController = TextEditingController();
-    _billNumberController = TextEditingController();
-    _amountController = TextEditingController();
+    _phoneController = TextEditingController();
+    _countryController = TextEditingController();
   }
 
   @override
   dispose() {
     super.dispose();
     _nameController.dispose();
-    _quantityController.dispose();
-    _amountController.dispose();
-    _billNumberController.dispose();
+    _phoneController.dispose();
+    _countryController.dispose();
   }
 
-  addPurchase() async {
-    final prov = Provider.of<QualityGrade>(context, listen: false);
-    if (prov.currentFarmer == null) {
-      SnackbarService.showFailedSnackbar(
-        context,
-        'Select a Farmer',
-      );
-    }
-    if (_quantityController.text.isNotEmptyAndNotNull &&
-        _billNumberController.text.isNotEmptyAndNotNull &&
-        _amountController.text.isNotEmptyAndNotNull &&
-        prov.currentValue != null &&
-        prov.date != null) {
-      if (double.tryParse(_quantityController.text) == null ||
-          double.tryParse(_amountController.text) == null) {
-        SnackbarService.showFailedSnackbar(
-          context,
-          'Amount or quantity should be number',
-        );
-        return;
-      }
-      Purchase data = Purchase(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: prov.currentFarmer!,
-        date: prov.date!,
-        quantity: double.parse(_quantityController.text),
-        amount: double.parse(_amountController.text),
-        billNumber: _billNumberController.text,
-        qualityGrade: prov.currentValue!,
-      );
+  Future future = DataLocal.instance.getAllPartyAsMap();
 
-      String response = await DataLocal.instance.addPurchase(data: data);
+  addParty() async {
+    if (_nameController.text.isNotEmptyAndNotNull) {
+      Party data = Party(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          name: _nameController.text);
+
+      String response = await DataLocal.instance.addParty(party: data);
       if (mounted) {
         if (response == 'success') {
           SnackbarService.showSuccessSnackbar(
               context, 'Successfully Added Purchase');
           resetFields();
+          setState(() {
+            future = DataLocal.instance.getAllFarmersAsMap();
+          });
           return;
         } else {
           SnackbarService.showFailedSnackbar(context, response);
@@ -97,7 +73,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       }
     }
     if (mounted) {
-      SnackbarService.showFailedSnackbar(context, 'No fields can be empty');
+      SnackbarService.showFailedSnackbar(context, 'Name cannot be empty');
     }
     return;
   }
@@ -108,7 +84,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return Scaffold(
       appBar: AppBar(
         title: MediaQuery.sizeOf(context).width > 600
-            ? 'Purchase'.text.color(AppColors.primaryTextColor).make()
+            ? 'Party'.text.color(AppColors.primaryTextColor).make()
             : null,
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
@@ -118,8 +94,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
               left: SizedBox(
                 width: 920,
                 child: LedgerWidget(
-                  future: DataLocal.instance.getAllPurchases(),
-                  headers: Purchase.props,
+                  future: future,
+                  headers: Party.props,
                 ),
               ),
               right: _dataEntryMethod(),
@@ -149,8 +125,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                 SizedBox(
                   width: 920,
                   child: LedgerWidget(
-                    future: DataLocal.instance.getAllPurchases(),
-                    headers: Purchase.props,
+                    future: future,
+                    headers: Party.props,
                   ),
                 ),
                 _dataEntryMethod(),
@@ -166,31 +142,19 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     return DataEntryForm(
       fields: [
         DataEntry(
-          hint: 'Date',
-          needDate: true,
-        ),
-        DataEntry(
-          hint: 'Bill Number',
-          textController: _billNumberController,
-        ),
-        DataEntry(
           hint: 'Name',
-          searchDropdown: true,
+          textController: _nameController,
         ),
         DataEntry(
-          hint: 'Quantity',
-          textController: _quantityController,
+          hint: 'Phone',
+          textController: _phoneController,
         ),
         DataEntry(
-          hint: 'Amount',
-          textController: _amountController,
+          hint: 'Country',
+          textController: _countryController,
         ),
-        DataEntry(
-          hint: 'Quality Grade',
-          dropdownValues: ['A', 'B', 'C'],
-        )
       ],
-      onSubmit: addPurchase,
+      onSubmit: addParty,
     ).expand();
   }
 }

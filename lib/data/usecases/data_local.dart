@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:shreeantu_tea/data/entity/datas_entity.dart';
 import 'package:shreeantu_tea/db/hive_offline_db.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
+import 'package:shreeantu_tea/model/party_model.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 
 class DataLocal extends DatasEntity {
@@ -9,6 +10,7 @@ class DataLocal extends DatasEntity {
 
   Future<Box> get _purchaseBox async => await HiveDb().box('purchases');
   Future<Box> get _farmerBox async => await HiveDb().box('farmers');
+  Future<Box> get _partyBox async => await HiveDb().box('party');
 
   DataLocal._internal();
 
@@ -30,7 +32,8 @@ class DataLocal extends DatasEntity {
       final bo = await _purchaseBox;
       final farmersBo = await _farmerBox;
       await bo.put(data.id, data.toMap());
-      await farmersBo.put('transactions', {
+      var farmerMap = await farmersBo.get(data.name.uid)['transaction'];
+      farmerMap.add({
         'id': data.id,
         'billNumber': data.billNumber,
         'date': data.date,
@@ -38,6 +41,8 @@ class DataLocal extends DatasEntity {
         'amount': data.amount,
         'qualityGrade': data.qualityGrade,
       });
+      await farmersBo.put(data.name.uid, farmerMap);
+
       return 'success';
     } catch (e) {
       return e.toString();
@@ -88,6 +93,16 @@ class DataLocal extends DatasEntity {
     }
   }
 
+  Future<String> addParty({required Party party}) async {
+    try {
+      final bo = await _partyBox;
+      await bo.put(party.id, party.toMap());
+      return 'success';
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   Future<List<Farmer?>> getAllFarmers() async {
     List? farmersMap = await _getAll(_farmerBox);
     List<Farmer> farmers = [];
@@ -97,8 +112,34 @@ class DataLocal extends DatasEntity {
     return farmers;
   }
 
+  Future<List<Party?>> getAllParty() async {
+    List? partyMap = await _getAll(_partyBox);
+    List<Party> party = [];
+    if (partyMap != null) {
+      party = partyMap.map((e) => Party.fromMap(e)).toList();
+    }
+    return party;
+  }
+
+  getAllPartyAsMap() async {
+    final map = await _getAll(_partyBox);
+    return map!
+        .map((e) => {
+              'id': e['id'],
+              'name': e['name'],
+              'phone': e['phone'],
+              'country': e['country'],
+              'creditAmount': e['creditAmount'],
+              'advanceAmount': e['advanceAmount'],
+              'paidAmount': e['paidAmount'],
+              'total': e['total'],
+            })
+        .toList();
+  }
+
   Future<List?> getAllFarmersAsMap() async {
     final map = await _getAll(_farmerBox);
+    print(map);
     return map!
         .map((e) => {
               'name': e['name'],

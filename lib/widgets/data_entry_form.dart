@@ -52,8 +52,8 @@ class DataEntryForm extends StatelessWidget {
                   }
                 },
               ).color(Colors.grey.shade300.withOpacity(0.8)).py8();
-            } else if (e.searchDropdown) {
-              return const SearchDropdown();
+            } else if (e.searchDropdownType == 'farmer') {
+              return const FarmerSearchDropdown();
             } else {
               return ListTile(
                 title: DropdownButton(

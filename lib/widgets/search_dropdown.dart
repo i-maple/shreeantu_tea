@@ -6,16 +6,16 @@ import 'package:shreeantu_tea/model/farmers_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class SearchDropdown extends StatefulWidget {
-  const SearchDropdown({
+class FarmerSearchDropdown extends StatefulWidget {
+  const FarmerSearchDropdown({
     super.key,
   });
 
   @override
-  State<SearchDropdown> createState() => SearchDropdownState();
+  State<FarmerSearchDropdown> createState() => FarmerSearchDropdownState();
 }
 
-class SearchDropdownState extends State<SearchDropdown> {
+class FarmerSearchDropdownState extends State<FarmerSearchDropdown> {
   final TextEditingController textEditingController = TextEditingController();
 
   @override

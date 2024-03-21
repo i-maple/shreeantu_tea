@@ -6,13 +6,18 @@ List<HomeItemModel> listOfObjects = [
 
   HomeItemModel(
     title: 'Farmer Details',
-    icon: const FaIcon(FontAwesomeIcons.cartArrowDown),
+    icon: const FaIcon(FontAwesomeIcons.tree),
     route: AppRouter.allFarmerRoute,
   ),
   HomeItemModel(
     title: 'Purchase',
     icon: const FaIcon(FontAwesomeIcons.cartArrowDown),
     route: AppRouter.purchaseRoute,
+  ),
+  HomeItemModel(
+    title: 'Party',
+    icon: const FaIcon(FontAwesomeIcons.teamspeak),
+    route: AppRouter.partyRoute,
   ),
   HomeItemModel(
     title: 'Sale',

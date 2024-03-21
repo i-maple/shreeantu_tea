@@ -180,7 +180,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         ),
         DataEntry(
           hint: 'Name',
-          searchDropdown: true,
+          searchDropdownType: 'farmer',
         ),
         DataEntry(
           hint: 'Quantity',
