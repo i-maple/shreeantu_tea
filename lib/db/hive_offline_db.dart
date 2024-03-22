@@ -14,7 +14,6 @@ class HiveDb {
   HiveDb._internal();
 
   Future<Box> box(String boxName) async {
-    await Hive.initFlutter();
     if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(FarmerAdapter());
     }
@@ -27,6 +26,7 @@ class HiveDb {
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(UserAdapter());
     }
+    await Hive.initFlutter();
     Box box = await Hive.openBox(boxName);
     return box;
   }
