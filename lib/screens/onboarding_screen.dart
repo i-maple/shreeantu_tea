@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shreeantu_tea/data/usecases/auth_local.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 import 'package:shreeantu_tea/screens/register_screen.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -26,6 +27,12 @@ class OnboardingScreen extends StatelessWidget {
               } else {
                 return const RegisterScreen();
               }
+            } else if (snap.connectionState == ConnectionState.waiting) {
+              'waiting'.text.make();
+            } else if (snap.connectionState == ConnectionState.none) {
+              'none'.text.make();
+            } else if (snap.connectionState == ConnectionState.active) {
+              'active'.text.make();
             }
             return const Center(
               child: CircularProgressIndicator(),
