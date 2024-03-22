@@ -81,7 +81,7 @@ class _AllFarmerScreenState extends State<AllFarmerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: MediaQuery.sizeOf(context).width > 600
-            ? 'Party'.text.color(AppColors.primaryTextColor).make()
+            ? 'Farmers'.text.color(AppColors.primaryTextColor).make()
             : null,
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
