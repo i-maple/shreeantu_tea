@@ -28,11 +28,11 @@ class OnboardingScreen extends StatelessWidget {
                 return const RegisterScreen();
               }
             } else if (snap.connectionState == ConnectionState.waiting) {
-              'waiting'.text.make();
+              return 'waiting'.text.make();
             } else if (snap.connectionState == ConnectionState.none) {
-              'none'.text.make();
+              return 'none'.text.make();
             } else if (snap.connectionState == ConnectionState.active) {
-              'active'.text.make();
+              return 'active'.text.make();
             }
             return const Center(
               child: CircularProgressIndicator(),
