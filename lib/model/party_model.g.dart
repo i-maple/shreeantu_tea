@@ -8,7 +8,7 @@ part of 'party_model.dart';
 
 class PartyAdapter extends TypeAdapter<Party> {
   @override
-  final int typeId = 3;
+  final int typeId = 4;
 
   @override
   Party read(BinaryReader reader) {
