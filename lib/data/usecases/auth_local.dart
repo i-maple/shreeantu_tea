@@ -23,8 +23,7 @@ class AuthLocal extends AuthEntity {
       }
       return 'Username or password not correct';
     } catch (e) {
-      print(e.toString());
-      return 'fail';
+      return e.toString();
     }
   }
 
@@ -64,7 +63,7 @@ class AuthLocal extends AuthEntity {
       }
       return 'success';
     } catch (e) {
-      return 'fail';
+      return e.toString();
     }
   }
 
