@@ -31,6 +31,7 @@ class FarmerSearchDropdownState extends State<FarmerSearchDropdown> {
       future: DataLocal.instance.getAllFarmers(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+            print(snapshot.data);
           if (snapshot.hasData) {
             var data = snapshot.data;
             return ListTile(

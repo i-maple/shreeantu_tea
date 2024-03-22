@@ -30,19 +30,7 @@ class DataLocal extends DatasEntity {
   Future<String> addPurchase({required Purchase data}) async {
     try {
       final bo = await _purchaseBox;
-      final farmersBo = await _farmerBox;
       await bo.put(data.id, data.toMap());
-      var farmerMap = await farmersBo.get(data.name.uid)['transaction'];
-      farmerMap.add({
-        'id': data.id,
-        'billNumber': data.billNumber,
-        'date': data.date,
-        'quantity': data.quantity,
-        'amount': data.amount,
-        'qualityGrade': data.qualityGrade,
-      });
-      await farmersBo.put(data.name.uid, farmerMap);
-
       return 'success';
     } catch (e) {
       return e.toString();
@@ -78,9 +66,26 @@ class DataLocal extends DatasEntity {
   }
 
   @override
-  Future<String> addSale({required Map data}) {
-    // TODO: implement addSale
-    throw UnimplementedError();
+  Future<String> addSale({required Map data}) async {
+    try {
+      final bo = await _purchaseBox;
+      final partyBo = await _partyBox;
+      await bo.put(data['id'], data);
+      var farmerMap = await partyBo.get(data['id'])['transaction'];
+      farmerMap.add({
+        'id': data['id'],
+        'invoiceNumber': data['invoiceNumber'],
+        'date': data['date'],
+        'quantity': data['quantity'],
+        'amount': data['amount'],
+        'total': data['quantity'] * data['amount'],
+      });
+      // await partyBo.put(data.name.uid, farmerMap);
+
+      return 'success';
+    } catch (e) {
+      return e.toString();
+    }
   }
 
   Future<String> addFarmer({required Farmer farmer}) async {
@@ -104,12 +109,16 @@ class DataLocal extends DatasEntity {
   }
 
   Future<List<Farmer?>> getAllFarmers() async {
-    List? farmersMap = await _getAll(_farmerBox);
-    List<Farmer> farmers = [];
-    if (farmersMap != null) {
-      farmers = farmersMap.map((e) => Farmer.fromMap(e)).toList();
+    try {
+      List? farmersMap = await _getAll(_farmerBox);
+      List<Farmer> farmers = [];
+      if (farmersMap != null) {
+        farmers = farmersMap.map((e) => Farmer.fromMap(e)).toList();
+      }
+      return farmers;
+    } catch (e) {
+      rethrow;
     }
-    return farmers;
   }
 
   Future<List<Party?>> getAllParty() async {
