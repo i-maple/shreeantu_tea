@@ -18,14 +18,14 @@ class FarmerAdapter extends TypeAdapter<Farmer> {
     };
     return Farmer(
       name: fields[0] as String,
-      uid: fields[2] as String,
-      phone: fields[3] as String?,
-      transaction: (fields[4] as List?)
+      uid: fields[1] as String,
+      phone: fields[2] as String?,
+      transaction: (fields[3] as List?)
           ?.map((dynamic e) => (e as Map).cast<dynamic, dynamic>())
           ?.toList(),
-      paidAmount: fields[5] as double?,
-      creditAmount: fields[6] as double?,
-      totalAmount: fields[7] as double?,
+      paidAmount: fields[4] as double?,
+      creditAmount: fields[5] as double?,
+      totalAmount: fields[6] as double?,
     );
   }
 
@@ -35,17 +35,17 @@ class FarmerAdapter extends TypeAdapter<Farmer> {
       ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.uid)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.phone)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.transaction)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.paidAmount)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.creditAmount)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.totalAmount);
   }
 

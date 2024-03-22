@@ -9,17 +9,17 @@ part 'farmers_model.g.dart';
 class Farmer {
   @HiveField(0)
   String name;
-  @HiveField(2)
+  @HiveField(1)
   String uid;
-  @HiveField(3)
+  @HiveField(2)
   String? phone;
-  @HiveField(4)
+  @HiveField(3)
   List<Map<dynamic, dynamic>>? transaction;
-  @HiveField(5)
+  @HiveField(4)
   final double? paidAmount;
-  @HiveField(6)
+  @HiveField(5)
   final double? creditAmount;
-  @HiveField(7)
+  @HiveField(6)
   final double? totalAmount;
 
 

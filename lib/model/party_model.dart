@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 
 part 'party_model.g.dart';
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 2)
 class Party {
   @HiveField(0)
   String id;
