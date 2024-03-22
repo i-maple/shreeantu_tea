@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shreeantu_tea/data/usecases/auth_local.dart';
 import 'package:shreeantu_tea/model/user_model.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
+import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
+import 'package:shreeantu_tea/widgets/primary_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -133,17 +135,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         const SizedBox(
           height: 10,
         ),
-        ElevatedButton(
-          onPressed: register,
-          child: 'Register'
-              .text
-              .size(18)
-              .center
-              .make()
-              .box
-              .width(double.infinity)
-              .make(),
-        )
+        PrimaryButton(
+                onTap: register,
+                color: AppColors.primaryColor,
+                child: 'Register'
+                    .text
+                    .size(18)
+                    .center
+                    .make()
+                    .box
+                    .width(double.infinity)
+                    .make())
+            .pOnly(
+          bottom: 32,
+        ),
       ],
     ).pSymmetric(h: 20).centered().scrollVertical();
   }
