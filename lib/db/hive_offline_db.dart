@@ -15,10 +15,18 @@ class HiveDb {
 
   Future<Box> box(String boxName) async {
     await Hive.initFlutter();
-    Hive.registerAdapter(FarmerAdapter());
-    Hive.registerAdapter(PartyAdapter());
-    Hive.registerAdapter(PurchaseAdapter());
-    Hive.registerAdapter(UserAdapter());
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(FarmerAdapter());
+    }
+    if (!Hive.isAdapterRegistered(2)) {
+      Hive.registerAdapter(PartyAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter(PurchaseAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter(UserAdapter());
+    }
     Box box = await Hive.openBox(boxName);
     return box;
   }
