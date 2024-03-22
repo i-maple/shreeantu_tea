@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shreeantu_tea/data/entity/datas_entity.dart';
 import 'package:shreeantu_tea/db/hive_offline_db.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
@@ -11,6 +12,8 @@ class DataLocal extends DatasEntity {
   Future<Box> get _purchaseBox async => await HiveDb().box('purchases');
   Future<Box> get _farmerBox async => await HiveDb().box('farmers');
   Future<Box> get _partyBox async => await HiveDb().box('party');
+  Future<Box> get _farmerPaymentBox async =>
+      await HiveDb().box('farmer-payment');
 
   DataLocal._internal();
 
@@ -163,9 +166,44 @@ class DataLocal extends DatasEntity {
         .toList();
   }
 
+  Future<String> makePaymentToFarmers(
+    Farmer farmer,
+    double paymentAmount,
+    NepaliDateTime date,
+  ) async {
+    try {
+      final box = await _farmerPaymentBox;
+      await box.put(DateTime.now().millisecondsSinceEpoch.toString(), {
+        'farmer': farmer.toMap(),
+        'amount': paymentAmount,
+        'date': date.format('y-M-d').toString(),
+      });
+      return 'success';
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<List> getPaymentsToFarmer(Farmer farmer) async {
+    try {
+      final box = await _farmerPaymentBox;
+      if (box.isEmpty) {
+        return [];
+      }
+      return box.values
+          .where(
+            (element) => element['farmer']['uid'] == farmer.uid,
+          )
+          .toList();
+    } catch (e) {
+      return [
+        e.toString(),
+      ];
+    }
+  }
+
   Future<List?> getAllFarmersAsMap() async {
     final map = await _getAll(_farmerBox);
-    print(map);
     return map!
         .map((e) => {
               'name': e['name'],

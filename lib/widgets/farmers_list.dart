@@ -11,6 +11,11 @@ class FarmersList extends StatelessWidget {
   openFarmerPopup(BuildContext context, Farmer farmer) async {
     final List<Map> map =
         await DataLocal.instance.getIndividualFarmerDetail(farmer);
+    final List payments = await DataLocal.instance.getPaymentsToFarmer(farmer);
+    double pay = 0;
+    for (var element in payments) {
+      pay += element['amount'];
+    }
     double total = 0;
     for (var element in map) {
       total += element['total'];
@@ -80,14 +85,32 @@ class FarmersList extends StatelessWidget {
                         children: [
                           ''.text.size(16).center.bold.make().p8(),
                           ''.text.center.size(16).bold.make().p8(),
-                          'Remaining: $total'
+                          ''.text.bold.center.size(16).make().p8(),
+                          ''.text.bold.size(16).center.make().p8(),
+                          'Paid: $pay'.text.bold.size(16).center.make().p8(),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          ''.text.size(16).center.bold.make().p8(),
+                          ''.text.center.size(16).bold.make().p8(),
+                          ''.text.bold.center.size(16).make().p8(),
+                          ''.text.bold.size(16).center.make().p8(),
+                          'Remaining: ${total - pay}'
                               .text
                               .bold
-                              .center
                               .size(16)
+                              .center
                               .make()
                               .p8(),
-                          'Paid: 0.0'.text.bold.size(16).center.make().p8(),
+                        ],
+                      ),
+                      TableRow(
+                        children: [
+                          ''.text.size(16).center.bold.make().p8(),
+                          ''.text.center.size(16).bold.make().p8(),
+                          ''.text.bold.center.size(16).make().p8(),
+                          ''.text.bold.size(16).center.make().p8(),
                           'Total: $total'.text.bold.size(16).center.make().p8(),
                         ],
                       ),

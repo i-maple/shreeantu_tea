@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:shreeantu_tea/model/data_entry.dart';
+import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
+import 'package:shreeantu_tea/utils/snackbar_service.dart';
 import 'package:shreeantu_tea/widgets/data_entry_form.dart';
 import 'package:shreeantu_tea/widgets/farmers_list.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -15,20 +19,50 @@ class IndividualFarmerScreen extends StatefulWidget {
 }
 
 class _IndividualFarmerScreenState extends State<IndividualFarmerScreen> {
-  late TextEditingController _priceController, _nameSearchController;
+  late TextEditingController _priceController;
 
   @override
   void initState() {
     super.initState();
     _priceController = TextEditingController();
-    _nameSearchController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
     _priceController.dispose();
-    _nameSearchController.dispose();
+  }
+
+  makePayment() async {
+    final prov = Provider.of<QualityGrade>(context, listen: false);
+    if (double.tryParse(_priceController.text) == 0 ||
+        double.tryParse(_priceController.text) == null) {
+      SnackbarService.showFailedSnackbar(
+          context, 'Amount should be only number and not empty');
+      return;
+    }
+    if (prov.currentFarmer == null) {
+      SnackbarService.showFailedSnackbar(context, 'Please Select A farmer');
+      return;
+    }
+    if (prov.date == null) {
+      SnackbarService.showFailedSnackbar(context, 'Please Select A date');
+      return;
+    }
+    String res = await DataLocal.instance.makePaymentToFarmers(
+        prov.currentFarmer!, double.parse(_priceController.text), prov.date!);
+    if (mounted) {
+      if (res == 'success') {
+        SnackbarService.showSuccessSnackbar(
+            context, 'successfully made payment');
+        _priceController.clear();
+        prov.reset();
+        return;
+      } else {
+        SnackbarService.showFailedSnackbar(context, res);
+        return;
+      }
+    }
   }
 
   @override
@@ -72,7 +106,7 @@ class _IndividualFarmerScreenState extends State<IndividualFarmerScreen> {
           Expanded(
             child: TabBarView(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 920,
                   child: FarmersList(),
                 ),
@@ -93,7 +127,7 @@ class _IndividualFarmerScreenState extends State<IndividualFarmerScreen> {
           needDate: true,
         ),
         DataEntry(
-          hint: 'Bill Number',
+          hint: 'Amount Paid',
           textController: _priceController,
         ),
         DataEntry(
@@ -101,7 +135,7 @@ class _IndividualFarmerScreenState extends State<IndividualFarmerScreen> {
           searchDropdownType: 'farmer',
         ),
       ],
-      onSubmit: () {},
+      onSubmit: makePayment,
     );
   }
 }
