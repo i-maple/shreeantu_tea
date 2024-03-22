@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:shreeantu_tea/model/data_entry.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
+import 'package:shreeantu_tea/routes/routes.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
 import 'package:shreeantu_tea/widgets/data_entry_form.dart';
@@ -84,6 +85,13 @@ class _AllFarmerScreenState extends State<AllFarmerScreen> {
             : null,
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
+        actions: [
+          ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(
+                  context, AppRouter.individualFarmerScreen),
+              icon: const Icon(Icons.travel_explore_outlined),
+              label: 'All Farmers Details'.text.make())
+        ],
       ),
       body: size.width > 1190
           ? VxTwoRow(

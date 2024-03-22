@@ -69,19 +69,7 @@ class DataLocal extends DatasEntity {
   Future<String> addSale({required Map data}) async {
     try {
       final bo = await _purchaseBox;
-      final partyBo = await _partyBox;
       await bo.put(data['id'], data);
-      var farmerMap = await partyBo.get(data['id'])['transaction'];
-      farmerMap.add({
-        'id': data['id'],
-        'invoiceNumber': data['invoiceNumber'],
-        'date': data['date'],
-        'quantity': data['quantity'],
-        'amount': data['amount'],
-        'total': data['quantity'] * data['amount'],
-      });
-      // await partyBo.put(data.name.uid, farmerMap);
-
       return 'success';
     } catch (e) {
       return e.toString();
@@ -105,6 +93,35 @@ class DataLocal extends DatasEntity {
       return 'success';
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  Future<List<Map>> getIndividualFarmerDetail(Farmer farmer) async {
+    try {
+      Box bo = await _purchaseBox;
+      if (bo.isEmpty) {
+        return [];
+      }
+      List<Map> mapped = [];
+      for (Map map in bo.values) {
+        mapped.add(map);
+      }
+      List<Map> mp = mapped
+          .where((element) => element['name']['uid'] == farmer.uid)
+          .toList();
+      return mp
+          .map((e) => {
+                'date': e['date'],
+                'quantity': e['quantity'],
+                'amount': e['amount'],
+                'qualityGrade': e['qualityGrade'],
+                'total': e['total'],
+              })
+          .toList();
+    } catch (e) {
+      return [
+        {'err': e.toString()},
+      ];
     }
   }
 

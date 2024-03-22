@@ -61,7 +61,7 @@ class Farmer {
     };
   }
 
-  factory Farmer.fromMap(Map<String, dynamic> map) {
+  factory Farmer.fromMap(Map<dynamic, dynamic> map) {
     return Farmer(
       name: map['name'] ?? '',
       uid: map['uid'] ?? '',
