@@ -1,16 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
+part 'party_model.g.dart';
+
+@HiveType(typeId: 3)
 class Party {
+  @HiveField(0)
   String id;
+  @HiveField(1)
   String name;
+  @HiveField(2)
   String? phone;
+  @HiveField(3)
   String? country;
+  @HiveField(4)
   List<Map>? transactions;
+  @HiveField(5)
   double? creditAmount;
+  @HiveField(6)
   double? advanceAmount;
+  @HiveField(7)
   double? paidAmount;
+
   Party({
     required this.id,
     required this.name,

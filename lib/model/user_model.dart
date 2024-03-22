@@ -1,11 +1,22 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
+
+part 'user_model.g.dart';
+
+@HiveType(typeId: 2)
 class User {
+  @HiveField(0)
   String name;
+  @HiveField(1)
   String username;
+  @HiveField(2)
   String? phone;
+  @HiveField(3)
   String? email;
+  @HiveField(4)
   String role;
+  @HiveField(5)
   String uid;
   User({
     required this.name,

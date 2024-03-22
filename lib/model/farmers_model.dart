@@ -1,15 +1,28 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 
 import 'package:flutter/foundation.dart';
 
+part 'farmers_model.g.dart';
+
+@HiveType(typeId: 1)
 class Farmer {
+  @HiveField(0)
   String name;
+  @HiveField(2)
   String uid;
+  @HiveField(3)
   String? phone;
+  @HiveField(4)
   List<Map<dynamic, dynamic>>? transaction;
+  @HiveField(5)
   final double? paidAmount;
+  @HiveField(6)
   final double? creditAmount;
+  @HiveField(7)
   final double? totalAmount;
+
+
   Farmer({
     required this.name,
     required this.uid,

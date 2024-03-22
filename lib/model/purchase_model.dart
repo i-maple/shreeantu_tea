@@ -1,17 +1,29 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import 'package:shreeantu_tea/model/farmers_model.dart';
 
+part 'purchase_model.g.dart';
+
+@HiveType(typeId: 3)
 class Purchase {
+  @HiveField(0)
   String billNumber;
+  @HiveField(1)
   NepaliDateTime date;
+  @HiveField(2)
   Farmer name;
+  @HiveField(3)
   String qualityGrade;
+  @HiveField(4)
   double quantity;
+  @HiveField(5)
   double amount;
+  @HiveField(6)
   String id;
+
   Purchase({
     required this.billNumber,
     required this.date,
