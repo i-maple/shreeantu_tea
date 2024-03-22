@@ -12,7 +12,13 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final Future<bool> fut = AuthLocal.instance.isFirstTime;
+  late Future<bool> fut;
+
+  @override
+  void initState() {
+    super.initState();
+    fut = AuthLocal.instance.isFirstTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           future: fut,
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
-              if(snap.hasError){
+              if (snap.hasError) {
                 return snap.error.toString().text.make();
               }
               if (snap.hasData) {
