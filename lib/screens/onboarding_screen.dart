@@ -4,14 +4,21 @@ import 'package:shreeantu_tea/routes/routes.dart';
 import 'package:shreeantu_tea/screens/register_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final Future<bool> fut = AuthLocal.instance.isFirstTime;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<bool>(
-          future: AuthLocal.instance.isFirstTime,
+          future: fut,
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
               if(snap.hasError){
