@@ -10,12 +10,12 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
+      body: FutureBuilder<bool>(
           future: AuthLocal.instance.isFirstTime,
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
               if(snap.requireData){
-                return 'data require'.text.make();
+                return 'data require ${snap.data}'.text.make();
               }
               if(snap.hasError){
                 return snap.error.toString().text.make();
@@ -34,11 +34,11 @@ class OnboardingScreen extends StatelessWidget {
                 return const RegisterScreen();
               }
             } else if (snap.connectionState == ConnectionState.waiting) {
-              return 'waiting'.text.make();
+              return 'waiting ${snap.data}'.text.make();
             } else if (snap.connectionState == ConnectionState.none) {
-              return 'none'.text.make();
+              return 'none ${snap.data}'.text.make();
             } else if (snap.connectionState == ConnectionState.active) {
-              return 'active'.text.make();
+              return 'active ${snap.data}'.text.make();
             }
             return const Center(
               child: CircularProgressIndicator(),
