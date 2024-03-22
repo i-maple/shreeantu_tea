@@ -14,6 +14,9 @@ class OnboardingScreen extends StatelessWidget {
           future: AuthLocal.instance.isFirstTime,
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
+              if(snap.hasError){
+                return snap.error.toString().text.make();
+              }
               if (snap.hasData) {
                 Future.delayed(Duration.zero, () {
                   bool isFirstTime = snap.data!;
