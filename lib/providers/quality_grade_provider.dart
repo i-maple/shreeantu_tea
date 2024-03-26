@@ -6,10 +6,12 @@ class QualityGrade extends ChangeNotifier {
   NepaliDateTime? _selectedDate;
   String? _currentValue;
   Farmer? _currentFarmer;
+  String? _transactiontype;
 
   NepaliDateTime? get date => _selectedDate;
   String? get currentValue => _currentValue;
   Farmer? get currentFarmer => _currentFarmer;
+  String? get transactionType => _transactiontype;
 
   set date(NepaliDateTime? dat) {
     _selectedDate = dat;
@@ -26,10 +28,16 @@ class QualityGrade extends ChangeNotifier {
     notifyListeners();
   }
 
+  set transactionType(String? value) {
+    _transactiontype = value;
+    notifyListeners();
+  }
+
   void reset() {
     _selectedDate = null;
     _currentFarmer = null;
     _currentFarmer = null;
+    _transactiontype = null;
     notifyListeners();
   }
 }

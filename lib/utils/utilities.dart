@@ -3,7 +3,6 @@ import 'package:shreeantu_tea/model/home_item_model.dart';
 import 'package:shreeantu_tea/routes/routes.dart';
 
 List<HomeItemModel> listOfObjects = [
-
   HomeItemModel(
     title: 'Farmer Details',
     icon: const FaIcon(FontAwesomeIcons.tree),
@@ -80,3 +79,75 @@ List<HomeItemModel> listOfObjects = [
     route: '/daily-expenses',
   ),
 ];
+
+List<String> titles = [
+  'Purchase',
+  'Sale',
+  'Income',
+  'Firewood Expense',
+  'Diesel Expenses',
+  'Electricity Expenses',
+  'Staff Expenses',
+  'Labour Expenses',
+  'TADA Expenses',
+  'Custom Expenses',
+  'Repair and Maintenance',
+  'Insurance',
+  'Daily Expenses',
+];
+
+Map<String, List<String>> textFieldsForEachTitles = {
+  'Purchase': [
+    'Bill Number',
+    'Quantity',
+    'Amount',
+  ],
+  'Sale': [
+    'Invoice Number',
+    'Quantity',
+    'Amount',
+  ],
+  'Income': [],
+  'Firewood Expense': [
+    'Party Name',
+    'Vehicle Number',
+    'Quantity',
+    'Amount',
+  ],
+  'Diesel Expenses': [
+    'Name',
+    'Liter',
+    'Amount',
+  ],
+  'Electricity Expenses': [],
+  'Staff Expenses': [
+    'Name',
+    'Monthly Salary',
+    'Bonus',
+  ],
+  'Interest': [
+    'Bank Name',
+    'Amount',
+  ],
+  'Labour Expenses': [
+    'Name',
+    'Hour Worked',
+    'Amount',
+    'OT',
+    'Total Amount',
+  ],
+  'TADA Expenses': [
+    'Name',
+    'Amount',
+  ],
+  'Custom Expenses': [
+    'Agent name',
+    'Amount',
+  ],
+  'Repair and Maintenance': [
+    'Detail',
+    'Amount',
+  ],
+  'Insurance': [],
+  'Daily Expenses': [],
+};

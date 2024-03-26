@@ -31,7 +31,7 @@ class FarmerSearchDropdownState extends State<FarmerSearchDropdown> {
       future: DataLocal.instance.getAllFarmers(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-            print(snapshot.data);
+          print(snapshot.data);
           if (snapshot.hasData) {
             var data = snapshot.data;
             return ListTile(
@@ -98,7 +98,10 @@ class FarmerSearchDropdownState extends State<FarmerSearchDropdown> {
                       ),
                     ),
                     searchMatchFn: (item, searchValue) {
-                      return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
+                      return item.value
+                          .toString()
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase());
                     },
                   ),
                   onMenuStateChange: (isOpen) {
@@ -115,6 +118,7 @@ class FarmerSearchDropdownState extends State<FarmerSearchDropdown> {
         }
         return const CircularProgressIndicator();
       },
-    ).py8().color(Colors.grey.shade300.withOpacity(0.8));
-  }
-}
+    ).py8().color(
+          Colors.grey.shade300.withOpacity(0.8),
+        );
+  }}

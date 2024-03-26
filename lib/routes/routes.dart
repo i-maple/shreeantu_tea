@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:shreeantu_tea/screens/all_farmer_screen.dart';
+import 'package:shreeantu_tea/screens/all_in_one_data_screen.dart';
 import 'package:shreeantu_tea/screens/home_screen.dart';
 import 'package:shreeantu_tea/screens/individual_farmer_screen.dart';
 import 'package:shreeantu_tea/screens/login_screen.dart';
@@ -16,7 +16,8 @@ class AppRouter {
   static String allFarmerRoute = '/farmers';
   static String partyRoute = '/party';
   static String individualFarmerScreen = '/individual-farmer';
-  static get initialRoute => onboardingRoute;
+  static String allInOneDataRoute = '/allInOneData';
+  static get initialRoute => allInOneDataRoute;
 
   static Map<String, Widget Function(BuildContext)> routes = {
     homeRoute: (context) => const HomeScreen(),
@@ -26,5 +27,6 @@ class AppRouter {
     allFarmerRoute: (context) => const AllFarmerScreen(),
     partyRoute: (context) => const PartyScreen(),
     individualFarmerScreen: (context) => const IndividualFarmerScreen(),
+    allInOneDataRoute: (context) => const AllInOneDataScreen(),
   };
 }

@@ -138,14 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         PrimaryButton(
                 onTap: register,
                 color: AppColors.primaryColor,
-                child: 'Register'
-                    .text
-                    .size(18)
-                    .center
-                    .make()
-                    .box
-                    .width(double.infinity)
-                    .make())
+                child: 'Register'.text.size(18).center.bold.make())
             .pOnly(
           bottom: 32,
         ),

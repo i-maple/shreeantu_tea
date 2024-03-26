@@ -13,7 +13,7 @@ class HiveDb {
 
   HiveDb._internal();
 
-  Future<Box> box(String boxName) async {
+  Future<Box> box<T>(String boxName) async {
     if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(FarmerAdapter());
     }
@@ -27,7 +27,7 @@ class HiveDb {
       Hive.registerAdapter(UserAdapter());
     }
     await Hive.initFlutter();
-    Box box = await Hive.openBox(boxName);
+    Box box = await Hive.openBox<T>(boxName);
     return box;
   }
 }

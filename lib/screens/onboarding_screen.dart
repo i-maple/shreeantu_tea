@@ -32,20 +32,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               }
               if (snap.hasData) {
                 bool isFirstTime = snap.data!;
-                if (isFirstTime) {
-                  return const RegisterScreen();
-                } else {
-                  Navigator.pushReplacementNamed(context, AppRouter.homeRoute);
-                }
+                Future.delayed(Duration.zero, () {
+                  if (isFirstTime) {
+                    return const RegisterScreen();
+                  } else {
+                    Navigator.pushReplacementNamed(
+                        context, AppRouter.homeRoute);
+                  }
+                });
               } else {
                 return const RegisterScreen();
               }
-            } else if (snap.connectionState == ConnectionState.waiting) {
-              return 'waiting ${snap.data}'.text.make();
-            } else if (snap.connectionState == ConnectionState.none) {
-              return 'none ${snap.data}'.text.make();
-            } else if (snap.connectionState == ConnectionState.active) {
-              return 'active ${snap.data}'.text.make();
             }
             return const Center(
               child: CircularProgressIndicator(),
