@@ -19,6 +19,7 @@ class LedgerWidget extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               var datas = snapshot.data;
+              print('datas $datas');
               List<List<String>> lists = [];
               for (Map<dynamic, dynamic> data in datas!) {
                 lists.add(

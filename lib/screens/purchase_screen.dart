@@ -127,7 +127,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   headers: Purchase.props,
                 ),
               ),
-              right: _dataEntryMethod().expand(),
+              right: dataEntryMethod().expand(),
             )
           : _tabbed(),
     );
@@ -158,7 +158,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     headers: Purchase.props,
                   ),
                 ),
-                _dataEntryMethod(),
+                dataEntryMethod(),
               ],
             ),
           ),
@@ -167,7 +167,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     );
   }
 
-  Widget _dataEntryMethod() {
+  Widget dataEntryMethod() {
     return DataEntryForm(
       fields: [
         DataEntry(

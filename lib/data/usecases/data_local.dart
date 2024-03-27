@@ -35,10 +35,8 @@ class DataLocal extends DatasEntity {
   Future<List<Map<String, String>>> getDataByType(String type) async {
     try {
       final transactionBox = await _transactionBox;
-
       List<Map<String, String>> list =
           transactionBox.values.cast<Map<String, String>>().toList();
-
       return list
           .where((Map<String, String> map) => map['transactionType'] == type)
           .toList();
