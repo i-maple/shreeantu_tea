@@ -35,7 +35,7 @@ class _SaleFormState extends State<SaleForm> {
   @override
   void dispose() {
     super.dispose();
-    _partySearch = TextEditingController();
+    _partySearch.dispose();
     _invoiceNumber.dispose();
     _quantity.dispose();
     _amount.dispose();
@@ -66,7 +66,7 @@ class _SaleFormState extends State<SaleForm> {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
       'name': prov.currentParty!.toMap(),
-      'billNumber': _invoiceNumber.text,
+      'invoiceNumber': _invoiceNumber.text,
       'quantity': _quantity.text.isNotBlank ? _quantity.text : 0,
       'rate': _rateController.text,
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
@@ -75,6 +75,12 @@ class _SaleFormState extends State<SaleForm> {
     String response= await DataLocal.instance.addDataByType('Sale', data);
     if(response == 'success' && mounted){
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      prov.reset();
+      _partySearch.clear();
+      _amount.clear();
+      _rateController.clear();
+      _quantity.clear();
+      _invoiceNumber.clear();
     }
     else{
       if(mounted){

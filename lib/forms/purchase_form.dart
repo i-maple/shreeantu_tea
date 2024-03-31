@@ -37,7 +37,7 @@ class _PurchaseFormState extends State<PurchaseForm> {
   @override
   void dispose() {
     super.dispose();
-    _farmerSearch = TextEditingController();
+    _farmerSearch.dispose();
     _billNumber.dispose();
     _qualityGrade.dispose();
     _quantity.dispose();
@@ -83,6 +83,13 @@ class _PurchaseFormState extends State<PurchaseForm> {
     String response= await DataLocal.instance.addDataByType('Purchase', data);
     if(response == 'success' && mounted){
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      prov.reset();
+      _farmerSearch.clear();
+      _billNumber.clear();
+      _quantity.clear();
+      _rateController.clear();
+      _amount.clear();
+      _qualityGrade.clear();
     }
     else{
       if(mounted){

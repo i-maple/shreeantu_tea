@@ -5,6 +5,7 @@ import 'package:shreeantu_tea/db/hive_offline_db.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
 import 'package:shreeantu_tea/model/party_model.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
+import 'package:shreeantu_tea/model/staff_model.dart';
 
 class DataLocal extends DatasEntity {
   static final instance = DataLocal._internal();
@@ -12,6 +13,7 @@ class DataLocal extends DatasEntity {
   Future<Box> get _purchaseBox async => await HiveDb().box('purchases');
   Future<Box> get _farmerBox async => await HiveDb().box('farmers');
   Future<Box> get _partyBox async => await HiveDb().box('party');
+  Future<Box> get _staffBox async => await HiveDb().box('staff');
   Future<Box> get _farmerPaymentBox async =>
       await HiveDb().box('farmer-payment');
   Future<Box> get _transactionBox async =>
@@ -36,19 +38,18 @@ class DataLocal extends DatasEntity {
     try {
       final transactionBox = await _transactionBox;
       print("nag ${transactionBox.values}");
-      return
-          transactionBox.values
-        .map<Map<String, dynamic>>((e) => {
-              'id': e['id'],
-              'billNumber': e['billNumber'],
-              'date': e['date'],
-              'name': e['name']['name'],
-              'qualityGrade': e['qualityGrade'],
-              'quantity': e['quantity'],
-              'rate': e['rate'],
-              'total': e['amount']
-            })
-        .toList();
+      return transactionBox.values
+          .map<Map<String, dynamic>>((e) => {
+                'id': e['id'],
+                'billNumber': e['billNumber'],
+                'date': e['date'],
+                'name': e['name']['name'],
+                'qualityGrade': e['qualityGrade'],
+                'quantity': e['quantity'],
+                'rate': e['rate'],
+                'total': e['amount']
+              })
+          .toList();
     } catch (e) {
       return [
         {
@@ -189,6 +190,15 @@ class DataLocal extends DatasEntity {
       party = partyMap.map((e) => Party.fromMap(e)).toList();
     }
     return party;
+  }
+
+  Future<List<Staff?>> getAllStaff() async {
+    List? staffMap = await _getAll(_staffBox);
+    List<Staff> staff = [];
+    if (staffMap != null) {
+      staff = staffMap.map((e) => Staff.fromMap(e)).toList();
+    }
+    return staff;
   }
 
   getAllPartyAsMap() async {

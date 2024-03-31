@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:shreeantu_tea/forms/form_fields.dart';
-import 'package:shreeantu_tea/model/party_model.dart';
+import 'package:shreeantu_tea/model/staff_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/utils/snackbar_service.dart';
 import 'package:shreeantu_tea/widgets/primary_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class FirewoodExpenseForm extends StatefulWidget {
-  const FirewoodExpenseForm({super.key});
+class StaffExpenseForm extends StatefulWidget {
+  const StaffExpenseForm({super.key});
 
   @override
-  State<FirewoodExpenseForm> createState() => _FirewoodExpenseFormState();
+  State<StaffExpenseForm> createState() => _StaffExpenseFormState();
 }
 
-class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
-  late TextEditingController _name, _liter, _amount;
+class _StaffExpenseFormState extends State<StaffExpenseForm> {
+  late TextEditingController _name, _salary, _bonus, _amount;
 
   @override
   void initState() {
     super.initState();
     _name = TextEditingController();
-    _liter = TextEditingController();
+    _bonus = TextEditingController();
+    _salary = TextEditingController();
     _amount = TextEditingController();
   }
 
@@ -30,7 +31,8 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
   void dispose() {
     super.dispose();
     _name.dispose();
-    _liter.dispose();
+    _bonus.dispose();
+    _salary.dispose();
     _amount.dispose();
   }
 
@@ -41,10 +43,6 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
       SnackbarService.showFailedSnackbar(context, 'Select a date');
       return;
     }
-    if ((!_liter.text.isNotBlank)) {
-      SnackbarService.showFailedSnackbar(context, 'Enter liter');
-      return;
-    }
     if ((!_amount.text.isNotBlank)) {
       SnackbarService.showFailedSnackbar(context, 'You need to enter amount');
       return;
@@ -53,16 +51,16 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'billNumber': _liter.text,
+      'staff': prov.currentStaff!.toMap(),
+      'bonus': _bonus.text,
+      'salary': _salary.text,
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response = await DataLocal.instance.addDataByType('Firewood Expense', data);
+    String response =
+        await DataLocal.instance.addDataByType('Firewood Expense', data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
-      prov.reset();
-      _name.clear();
-      _amount.clear();
     } else {
       if (mounted) {
         SnackbarService.showFailedSnackbar(context, response);
@@ -76,38 +74,58 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
       children: [
         'Add a purchase'.text.xl.bold.make(),
         FormFields.pickDate(context),
-        FormFields.commonTextField(
-            controller: _liter, labelText: 'Bill Number'),
         FutureBuilder(
-            future: DataLocal.instance.getAllParty(),
+            future: DataLocal.instance.getAllStaff(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
                 return FormFields.grayWrapper(
-                  FormFields.chooseDropdown<Party>(
+                  FormFields.chooseDropdown<Staff>(
                     context,
                     controller: _name,
-                    hint: 'Search Farmer',
+                    hint: 'Search Staff',
                     value: Provider.of<QualityGrade>(
                       context,
-                    ).currentParty,
+                    ).currentStaff,
                     items: snapshot.data!
                         .map((e) => DropdownMenuItem(
                               value: e,
-                              child: Text(e!.name),
+                              child: Text(e!.name!),
                             ))
                         .toList(),
                     onChanged: (p0) =>
                         Provider.of<QualityGrade>(context, listen: false)
-                            .currentParty = p0,
+                            .currentStaff = p0,
                   ),
                 );
               }
               return const CircularProgressIndicator();
             }),
         FormFields.commonTextField(
+          controller: _salary,
+          labelText: 'Salary',
+          onChanged: (value) {
+            if (_amount.text.isNotEmpty) {
+              double salary = double.tryParse(value ?? '0') ?? 1;
+              double bonus = double.tryParse(_bonus.text) ?? 0;
+              _amount.text = (salary + bonus).toString();
+            }
+          },
+        ),
+        FormFields.commonTextField(
+            controller: _bonus,
+            labelText: 'Bonus',
+            onChanged: (value) {
+              if (_salary.text.isNotEmpty) {
+                double salary = double.tryParse(_salary.text) ?? 1;
+                double bonus = double.tryParse(value ?? '0') ?? 0;
+                _amount.text = (salary + bonus).toString();
+              }
+            }),
+        FormFields.commonTextField(
           controller: _amount,
           labelText: 'Amount',
+          disabled: true,
         ),
         PrimaryButton(
             onTap: addFirewoodExpense,

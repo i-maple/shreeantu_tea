@@ -5,6 +5,7 @@ import 'package:shreeantu_tea/forms/firewood_expense_form.dart';
 import 'package:shreeantu_tea/forms/form_fields.dart';
 import 'package:shreeantu_tea/forms/purchase_form.dart';
 import 'package:shreeantu_tea/forms/sale.dart';
+import 'package:shreeantu_tea/forms/staff_expense_form.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/utils/utilities.dart';
@@ -39,6 +40,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
       'Purchase' => const PurchaseForm(),
       'Sale' => const SaleForm(),
       'Firewood Expense' => const FirewoodExpenseForm(),
+      'Staff Expenses' => const StaffExpenseForm(),
       _ => 'Select a Transaction Type'.text.make(),
     };
   }
