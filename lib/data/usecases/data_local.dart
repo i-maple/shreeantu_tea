@@ -15,13 +15,13 @@ class DataLocal extends DatasEntity {
   Future<Box> get _farmerPaymentBox async =>
       await HiveDb().box('farmer-payment');
   Future<Box> get _transactionBox async =>
-      await HiveDb().box<Map<String, String>>('transaction-box');
+      await HiveDb().box('transaction-box');
 
   DataLocal._internal();
 
   Future<String> addDataByType(
     String type,
-    Map<String, String> data,
+    Map<String, dynamic> data,
   ) async {
     try {
       final transactionBox = await _transactionBox;
@@ -32,14 +32,23 @@ class DataLocal extends DatasEntity {
     }
   }
 
-  Future<List<Map<String, String>>> getDataByType(String type) async {
+  Future<List<Map<String, dynamic>>> getDataByType(String type) async {
     try {
       final transactionBox = await _transactionBox;
-      List<Map<String, String>> list =
-          transactionBox.values.cast<Map<String, String>>().toList();
-      return list
-          .where((Map<String, String> map) => map['transactionType'] == type)
-          .toList();
+      print("nag ${transactionBox.values}");
+      return
+          transactionBox.values
+        .map<Map<String, dynamic>>((e) => {
+              'id': e['id'],
+              'billNumber': e['billNumber'],
+              'date': e['date'],
+              'name': e['name']['name'],
+              'qualityGrade': e['qualityGrade'],
+              'quantity': e['quantity'],
+              'rate': e['rate'],
+              'total': e['amount']
+            })
+        .toList();
     } catch (e) {
       return [
         {

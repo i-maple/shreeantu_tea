@@ -159,7 +159,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   ),
                 ),
                 dataEntryMethod(),
-              ],
+              ]
             ),
           ),
         ],

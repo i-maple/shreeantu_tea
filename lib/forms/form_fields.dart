@@ -16,15 +16,21 @@ class FormFields {
 
   static Widget commonTextField({
     String? labelText,
+    bool disabled = false,
     String? hint,
     TextEditingController? controller,
+    void Function(String?)? onChanged,
+    String? value,
   }) {
     return VxTextField(
+      value: value,
       labelText: labelText,
       hint: hint,
       controller: controller,
       contentPaddingLeft: 15,
-    );
+      readOnly: disabled,
+      onChanged: onChanged,
+    ).py8();
   }
 
   static Widget pickDate(BuildContext context) {
@@ -124,6 +130,6 @@ class FormFields {
           },
         ),
       ),
-    );
+    ).py8();
   }
 }

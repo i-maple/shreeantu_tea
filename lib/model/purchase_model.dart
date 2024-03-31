@@ -43,8 +43,8 @@ class Purchase {
         'Name',
         'Grade',
         'Quantity',
+        'Rate',
         'Amount',
-        'Total',
       ];
 
   Purchase copyWith({

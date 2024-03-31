@@ -33,8 +33,8 @@ class Farmer {
     this.totalAmount,
   });
   static List<String> props = [
-    'Name',
     'UID',
+    'Name',
     'Phone',
     'Paid Amount',
     'Credit Amount',

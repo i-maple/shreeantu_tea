@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
+import 'package:shreeantu_tea/forms/firewood_expense_form.dart';
 import 'package:shreeantu_tea/forms/form_fields.dart';
-import 'package:shreeantu_tea/model/farmers_model.dart';
-import 'package:shreeantu_tea/screens/purchase_screen.dart';
+import 'package:shreeantu_tea/forms/purchase_form.dart';
+import 'package:shreeantu_tea/forms/sale.dart';
+import 'package:shreeantu_tea/model/purchase_model.dart';
+import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
 import 'package:shreeantu_tea/utils/utilities.dart';
 import 'package:shreeantu_tea/widgets/ledger_widget.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -18,7 +22,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
   final TextEditingController _searchTypeController = TextEditingController();
   final TextEditingController _displayTypeController = TextEditingController();
 
-  Future<List<Map<String, String>>> _futureToGetDatas =
+  Future<List<Map<String, dynamic>>> _futureToGetDatas =
       DataLocal.instance.getDataByType('Purchase');
   String displayValue = 'Purchase';
 
@@ -29,10 +33,13 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
     _displayTypeController.dispose();
   }
 
-  Future<Widget> getForm() async {
-    return switch(displayValue){
-      'Purchase' => PurchaseScreen(),
-      _ =>const SizedBox(),
+  Widget getForm() {
+    String? type = Provider.of<QualityGrade>(context).transactionType;
+    return switch (type) {
+      'Purchase' => const PurchaseForm(),
+      'Sale' => const SaleForm(),
+      'Firewood Expense' => const FirewoodExpenseForm(),
+      _ => 'Select a Transaction Type'.text.make(),
     };
   }
 
@@ -52,7 +59,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
   _twoRowEntryAndDisplay() {
     return VxTwoRow(
       left: _getLedger(),
-      right: SizedBox(),
+      right: _form().expand(),
     ).p20();
   }
 
@@ -86,7 +93,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
           LedgerWidget(
             future: _futureToGetDatas,
             headers: [
-              ...Farmer.props,
+              ...Purchase.props,
             ],
           ).expand(),
         ],
@@ -112,7 +119,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
           TabBarView(
             children: [
               _getLedger(),
-              SizedBox(),
+              _form(),
             ],
           ).expand(),
         ],
@@ -128,21 +135,27 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
     );
   }
 
-  Widget _form({List<Widget>? children}) {
+  Widget _form() {
     return Column(
       children: [
         FormFields.grayWrapper(
           DropdownButton(
+            hint: 'Transaction Type'.text.make(),
             items: titles
                 .map((e) => DropdownMenuItem(
                       value: e,
                       child: e.text.make(),
                     ))
                 .toList(),
-            onChanged: (val) {},
+            onChanged: (val) {
+              Provider.of<QualityGrade>(context, listen: false)
+                  .transactionType = val;
+            },
+            value: Provider.of<QualityGrade>(context, listen: false)
+                .transactionType,
           ),
         ),
-        ...children ?? []
+        getForm()
       ],
     );
   }
