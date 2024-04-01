@@ -8,6 +8,7 @@ import 'package:shreeantu_tea/forms/sale.dart';
 import 'package:shreeantu_tea/forms/staff_expense_form.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
+import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/utilities.dart';
 import 'package:shreeantu_tea/widgets/ledger_widget.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -49,7 +50,9 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: 'Shree Antu Tea'.text.make(),
+        title: 'Shree Antu Tea'.text.white.make(),
+        centerTitle: true,
+        backgroundColor: AppColors.primaryColor,
       ),
       drawer: Drawer(
         child: Column(
@@ -88,7 +91,8 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
       child: Column(
         children: [
           ListTile(
-            leading: 'Transaction Type'.text.make(),
+            tileColor: AppColors.primaryColor,
+            leading: 'Transaction Type'.text.white.make(),
             title: FormFields.chooseDropdown<String>(
               context,
               hint: 'Choose a Type',

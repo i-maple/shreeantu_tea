@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shreeantu_tea/model/bank_model.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
+import 'package:shreeantu_tea/model/labour_model.dart';
 import 'package:shreeantu_tea/model/party_model.dart';
 import 'package:shreeantu_tea/model/staff_model.dart';
 
@@ -13,6 +14,7 @@ class QualityGrade extends ChangeNotifier {
   Party? _currentParty;
   Staff? _currentStaff;
   Bank? _currentBank;
+  Labour? _currentLabour;
 
   NepaliDateTime? get date => _selectedDate;
   String? get currentValue => _currentValue;
@@ -21,6 +23,7 @@ class QualityGrade extends ChangeNotifier {
   Party? get currentParty => _currentParty;
   Staff? get currentStaff => _currentStaff;
   Bank? get currentBank => _currentBank;
+  Labour? get currentLabour => _currentLabour;
 
 
   set date(NepaliDateTime? dat) {
@@ -55,6 +58,10 @@ class QualityGrade extends ChangeNotifier {
     _currentBank = bank;
     notifyListeners();
   }
+  set currentLabour(Labour? labour){
+    _currentLabour = labour;
+    notifyListeners();
+  }
 
   void reset() {
     _selectedDate = null;
@@ -62,6 +69,7 @@ class QualityGrade extends ChangeNotifier {
     _currentFarmer = null;
     _transactiontype = null;
     _currentParty = null;
+    _currentLabour = null;
     notifyListeners();
   }
 }

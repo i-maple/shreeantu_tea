@@ -57,7 +57,7 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response = await DataLocal.instance.addDataByType('Firewood Expense', data);
+    String response = await DataLocal.instance.addDataByType('Firewood Expenses', data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       prov.reset();

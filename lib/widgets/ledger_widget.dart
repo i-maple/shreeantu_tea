@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class LedgerWidget extends StatelessWidget {
@@ -27,6 +28,7 @@ class LedgerWidget extends StatelessWidget {
                 );
               }
               return DataTable(
+                headingRowColor: MaterialStatePropertyAll(AppColors.primaryContainer),
                 columns: headers
                     .map(
                       (e) => DataColumn(
