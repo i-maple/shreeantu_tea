@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shreeantu_tea/data/entity/datas_entity.dart';
 import 'package:shreeantu_tea/db/hive_offline_db.dart';
+import 'package:shreeantu_tea/model/bank_model.dart';
 import 'package:shreeantu_tea/model/farmers_model.dart';
 import 'package:shreeantu_tea/model/party_model.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
@@ -14,6 +15,7 @@ class DataLocal extends DatasEntity {
   Future<Box> get _farmerBox async => await HiveDb().box('farmers');
   Future<Box> get _partyBox async => await HiveDb().box('party');
   Future<Box> get _staffBox async => await HiveDb().box('staff');
+  Future<Box> get _bankBox async => await HiveDb().box('bank');
   Future<Box> get _farmerPaymentBox async =>
       await HiveDb().box('farmer-payment');
   Future<Box> get _transactionBox async =>
@@ -190,6 +192,15 @@ class DataLocal extends DatasEntity {
       party = partyMap.map((e) => Party.fromMap(e)).toList();
     }
     return party;
+  }
+
+  Future<List<Bank?>> getAllBank() async {
+    List? bankMap = await _getAll(_bankBox);
+    List<Bank> bank = [];
+    if (bankMap != null) {
+      bank = bankMap.map((e) => Bank.fromMap(e)).toList();
+    }
+    return bank;
   }
 
   Future<List<Staff?>> getAllStaff() async {

@@ -48,6 +48,23 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: 'Shree Antu Tea'.text.make(),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            const DrawerHeader(
+              child: Placeholder(
+                fallbackHeight: 200,
+              ),
+            ),
+            ListTile(
+              title: 'Add Users'.text.make(),
+            ),
+          ],
+        ).scrollVertical(),
+      ),
       body: VxResponsive(
         large: _twoRowEntryAndDisplay(),
         xlarge: _twoRowEntryAndDisplay(),
