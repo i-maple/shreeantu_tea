@@ -8,14 +8,14 @@ import 'package:shreeantu_tea/utils/snackbar_service.dart';
 import 'package:shreeantu_tea/widgets/primary_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class StaffExpenseForm extends StatefulWidget {
-  const StaffExpenseForm({super.key});
+class LabourExpenseForm extends StatefulWidget {
+  const LabourExpenseForm({super.key});
 
   @override
-  State<StaffExpenseForm> createState() => _StaffExpenseFormState();
+  State<LabourExpenseForm> createState() => _LabourExpenseFormState();
 }
 
-class _StaffExpenseFormState extends State<StaffExpenseForm> {
+class _LabourExpenseFormState extends State<LabourExpenseForm> {
   late TextEditingController _name, _hourWorked, _amount, _ot, _totalAmount;
 
   @override
