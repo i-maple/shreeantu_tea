@@ -60,6 +60,9 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
     String response = await DataLocal.instance.addDataByType('Firewood Expenses', data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      final double preAmount = await DataLocal.instance.getAmount();
+      double newAmt = preAmount - (double.tryParse(_amount.text) ?? 0);
+      await DataLocal.instance.updateAmount(newAmt);
       prov.reset();
       _name.clear();
       _amount.clear();

@@ -18,12 +18,23 @@ class DataLocal extends DatasEntity {
   Future<Box> get _staffBox async => await HiveDb().box('staff');
   Future<Box> get _labourBox async => await HiveDb().box('labour');
   Future<Box> get _bankBox async => await HiveDb().box('bank');
+  Future<Box> get _amountBox async => await HiveDb().box<double>('amount');
   Future<Box> get _farmerPaymentBox async =>
       await HiveDb().box('farmer-payment');
   Future<Box> _transactionBox(String box) async =>
       await HiveDb().box(box);
 
   DataLocal._internal();
+
+  Future<double> getAmount() async {
+    final box = await _amountBox;
+    return box.isNotEmpty ? box.get('amount') : 0;
+  }
+
+  Future<void> updateAmount(double amount) async {
+    final box = await _amountBox;
+    box.put('amount', amount);
+  }
 
   Future<String> addDataByType(
     String type,
@@ -46,14 +57,7 @@ class DataLocal extends DatasEntity {
       }
       return transactionBox.values
           .map<Map<String, dynamic>>((e) => {
-                'id': e['id'],
-                'billNumber': e['billNumber'],
-                'date': e['date'],
-                'name': e['name']['name'],
-                'qualityGrade': e['qualityGrade'],
-                'quantity': e['quantity'],
-                'rate': e['rate'],
-                'total': e['amount']
+                ...e
               })
           .toList();
     } catch (e) {
@@ -190,12 +194,17 @@ class DataLocal extends DatasEntity {
   }
 
   Future<List<Party?>> getAllParty() async {
-    List? partyMap = await _getAll(_partyBox);
-    List<Party> party = [];
-    if (partyMap != null) {
-      party = partyMap.map((e) => Party.fromMap(e)).toList();
+    try {
+      List? partyMap = await _getAll(_partyBox);
+      List<Party> party = [];
+      print(partyMap);
+      if (partyMap != null) {
+        party = partyMap.map((e) => Party.fromMap(e)).toList();
+      }
+      return party;
+    } catch (e) {
+      rethrow;
     }
-    return party;
   }
 
   Future<List<Bank?>> getAllBank() async {
@@ -232,10 +241,6 @@ class DataLocal extends DatasEntity {
               'name': e['name'],
               'phone': e['phone'],
               'country': e['country'],
-              'creditAmount': e['creditAmount'],
-              'advanceAmount': e['advanceAmount'],
-              'paidAmount': e['paidAmount'],
-              'total': e['total'],
             })
         .toList();
   }

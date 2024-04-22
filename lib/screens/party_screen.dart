@@ -53,8 +53,11 @@ class _PartyScreenState extends State<PartyScreen> {
   addParty() async {
     if (_nameController.text.isNotEmptyAndNotNull) {
       Party data = Party(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          name: _nameController.text);
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: _nameController.text,
+        country: _countryController.text,
+        phone: _phoneController.text,
+      );
 
       String response = await DataLocal.instance.addParty(party: data);
       if (mounted) {
@@ -63,7 +66,7 @@ class _PartyScreenState extends State<PartyScreen> {
               context, 'Successfully Added Purchase');
           resetFields();
           setState(() {
-            future = DataLocal.instance.getAllFarmersAsMap();
+            future = DataLocal.instance.getAllPartyAsMap();
           });
           return;
         } else {

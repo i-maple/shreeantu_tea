@@ -51,7 +51,8 @@ class _InterestFormState extends State<InterestForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'staff': prov.currentStaff!.toMap(),
+      'Bank': prov.currentBank!.name,
+      'Bank Id': prov.currentBank!.id,
       'bonus': _bonus.text,
       'salary': _salary.text,
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
@@ -61,6 +62,9 @@ class _InterestFormState extends State<InterestForm> {
         await DataLocal.instance.addDataByType('Firewood Expense', data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      final double preAmount = await DataLocal.instance.getAmount();
+      double newAmt = preAmount + (double.tryParse(_amount.text) ?? 0);
+      await DataLocal.instance.updateAmount(newAmt);
     } else {
       if (mounted) {
         SnackbarService.showFailedSnackbar(context, response);

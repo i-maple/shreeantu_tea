@@ -57,7 +57,8 @@ class _LabourExpenseFormState extends State<LabourExpenseForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'name': prov.currentLabour!.toMap(),
+      'Labor Name': prov.currentLabour!.name,
+      'Labor Id': prov.currentLabour!.id,
       'amount': _amount.text,
       'ot': _ot.text,
       'totalAmount': _totalAmount.text.isNotBlank ? _totalAmount.text : 0,

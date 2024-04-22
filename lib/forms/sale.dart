@@ -65,26 +65,29 @@ class _SaleFormState extends State<SaleForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'name': prov.currentParty!.toMap(),
+      'Party Name': prov.currentParty!.name,
+      'Party Id': prov.currentParty!.id,
       'invoiceNumber': _invoiceNumber.text,
       'quantity': _quantity.text.isNotBlank ? _quantity.text : 0,
       'rate': _rateController.text,
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response= await DataLocal.instance.addDataByType('Sale', data);
-    if(response == 'success' && mounted){
+    String response = await DataLocal.instance.addDataByType('Sale', data);
+    if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      final double preAmount = await DataLocal.instance.getAmount();
+      double newAmt = preAmount + (double.tryParse(_amount.text) ?? 0);
+      await DataLocal.instance.updateAmount(newAmt);
       prov.reset();
       _partySearch.clear();
       _amount.clear();
       _rateController.clear();
       _quantity.clear();
       _invoiceNumber.clear();
-    }
-    else{
-      if(mounted){
-      SnackbarService.showFailedSnackbar(context, response);   
+    } else {
+      if (mounted) {
+        SnackbarService.showFailedSnackbar(context, response);
       }
     }
   }
@@ -93,7 +96,7 @@ class _SaleFormState extends State<SaleForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        'Add a purchase'.text.xl.bold.make(),
+        'Add a Sale'.text.xl.bold.make(),
         FormFields.pickDate(context),
         FormFields.commonTextField(
             controller: _invoiceNumber, labelText: 'Bill Number'),
@@ -102,6 +105,7 @@ class _SaleFormState extends State<SaleForm> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
+                    print('object');
                 return FormFields.grayWrapper(
                   FormFields.chooseDropdown<Party>(
                     context,

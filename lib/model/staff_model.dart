@@ -1,22 +1,26 @@
 import 'dart:convert';
 
+
 class Staff {
 
   String? name;
   String? salary;
+  String? id;
   Staff({
     this.name,
     this.salary,
+    this.id,
   });
-
 
   Staff copyWith({
     String? name,
     String? salary,
+    String? id,
   }) {
     return Staff(
       name: name ?? this.name,
       salary: salary ?? this.salary,
+      id: id ?? this.id,
     );
   }
 
@@ -24,6 +28,7 @@ class Staff {
     return {
       'name': name,
       'salary': salary,
+      'id': id,
     };
   }
 
@@ -31,6 +36,7 @@ class Staff {
     return Staff(
       name: map['name'],
       salary: map['salary'],
+      id: map['id'],
     );
   }
 
@@ -39,7 +45,7 @@ class Staff {
   factory Staff.fromJson(String source) => Staff.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Staff(name: $name, salary: $salary)';
+  String toString() => 'Staff(name: $name, salary: $salary, id: $id)';
 
   @override
   bool operator ==(Object other) {
@@ -47,9 +53,10 @@ class Staff {
   
     return other is Staff &&
       other.name == name &&
-      other.salary == salary;
+      other.salary == salary &&
+      other.id == id;
   }
 
   @override
-  int get hashCode => name.hashCode ^ salary.hashCode;
+  int get hashCode => name.hashCode ^ salary.hashCode ^ id.hashCode;
 }

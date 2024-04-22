@@ -72,7 +72,8 @@ class _PurchaseFormState extends State<PurchaseForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'name': prov.currentFarmer!.toMap(),
+      'Farmer Name': prov.currentFarmer!.name,
+      'Farmer Id': prov.currentFarmer!.uid,
       'billNumber': _billNumber.text,
       'quantity': _quantity.text.isNotBlank ? _quantity.text : 0,
       'rate': _rateController.text,
@@ -80,9 +81,12 @@ class _PurchaseFormState extends State<PurchaseForm> {
       'qualityGrade': _qualityGrade.text,
     };
 
-    String response= await DataLocal.instance.addDataByType('Purchase', data);
-    if(response == 'success' && mounted){
+    String response = await DataLocal.instance.addDataByType('Purchase', data);
+    if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
+      final double preAmount = await DataLocal.instance.getAmount();
+      double newAmt = preAmount - (double.tryParse(_amount.text) ?? 0);
+      await DataLocal.instance.updateAmount(newAmt);
       prov.reset();
       _farmerSearch.clear();
       _billNumber.clear();
@@ -90,10 +94,9 @@ class _PurchaseFormState extends State<PurchaseForm> {
       _rateController.clear();
       _amount.clear();
       _qualityGrade.clear();
-    }
-    else{
-      if(mounted){
-      SnackbarService.showFailedSnackbar(context, response);   
+    } else {
+      if (mounted) {
+        SnackbarService.showFailedSnackbar(context, response);
       }
     }
   }

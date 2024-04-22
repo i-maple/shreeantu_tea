@@ -81,7 +81,7 @@ class Party {
     };
   }
 
-  factory Party.fromMap(Map<String, dynamic> map) {
+  factory Party.fromMap(Map<dynamic, dynamic> map) {
     return Party(
       id: map['id'] ?? '',
       name: map['name'] ?? '',

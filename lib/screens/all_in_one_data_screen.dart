@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
 import 'package:shreeantu_tea/forms/firewood_expense_form.dart';
@@ -8,6 +9,8 @@ import 'package:shreeantu_tea/forms/sale.dart';
 import 'package:shreeantu_tea/forms/staff_expense_form.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
+import 'package:shreeantu_tea/screens/all_farmer_screen.dart';
+import 'package:shreeantu_tea/screens/party_screen.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/utilities.dart';
 import 'package:shreeantu_tea/widgets/ledger_widget.dart';
@@ -63,7 +66,36 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
               ),
             ),
             ListTile(
-              title: 'Add Users'.text.make(),
+              leading: const Icon(Icons.agriculture),
+              title: 'Farmers'.text.make(),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const AllFarmerScreen(),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.support_agent),
+              title: 'Party'.text.make(),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const PartyScreen(),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.peopleCarryBox),
+              title: 'Labour'.text.make(),
+            ),
+            ListTile(
+              leading: const Icon(FontAwesomeIcons.peopleGroup),
+              title: 'Staff'.text.make(),
+            ),
+            ListTile(
+              leading: const FaIcon(Icons.money),
+              title: 'Bank'.text.make(),
             ),
           ],
         ).scrollVertical(),
@@ -93,6 +125,21 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
           ListTile(
             tileColor: AppColors.primaryColor,
             leading: 'Transaction Type'.text.white.make(),
+            trailing: FutureBuilder(
+                future: DataLocal.instance.getAmount(),
+                builder: (context, snap) {
+                  if (snap.hasData &&
+                      snap.connectionState == ConnectionState.done) {
+                    return Text(
+                      'Balance: ${snap.data.toString()}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    );
+                  }
+                  return const CircularProgressIndicator.adaptive();
+                }),
             title: FormFields.chooseDropdown<String>(
               context,
               hint: 'Choose a Type',
