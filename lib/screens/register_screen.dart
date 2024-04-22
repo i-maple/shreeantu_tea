@@ -90,7 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Placeholder(
+        const Placeholder(
           fallbackHeight: 200,
         ).pSymmetric(v: 20),
         const SizedBox(

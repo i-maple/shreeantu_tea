@@ -30,7 +30,7 @@ class Bank {
     };
   }
 
-  factory Bank.fromMap(Map<String, dynamic> map) {
+  factory Bank.fromMap(Map<dynamic, dynamic> map) {
     return Bank(
       name: map['name'] ?? '',
       branch: map['branch'],

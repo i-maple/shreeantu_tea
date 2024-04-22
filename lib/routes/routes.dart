@@ -6,6 +6,7 @@ import 'package:shreeantu_tea/screens/individual_farmer_screen.dart';
 import 'package:shreeantu_tea/screens/login_screen.dart';
 import 'package:shreeantu_tea/screens/onboarding_screen.dart';
 import 'package:shreeantu_tea/screens/party_screen.dart';
+import 'package:shreeantu_tea/screens/party_search.dart';
 import 'package:shreeantu_tea/screens/purchase_screen.dart';
 
 class AppRouter {
@@ -17,7 +18,8 @@ class AppRouter {
   static String partyRoute = '/party';
   static String individualFarmerScreen = '/individual-farmer';
   static String allInOneDataRoute = '/allInOneData';
-  static get initialRoute => allInOneDataRoute;
+  static String individualPartyRoute = '/individualParty';
+  static get initialRoute => onboardingRoute;
 
   static Map<String, Widget Function(BuildContext)> routes = {
     homeRoute: (context) => const HomeScreen(),
@@ -28,5 +30,6 @@ class AppRouter {
     partyRoute: (context) => const PartyScreen(),
     individualFarmerScreen: (context) => const IndividualFarmerScreen(),
     allInOneDataRoute: (context) => const AllInOneDataScreen(),
+    individualPartyRoute: (context) => const PartySearchScreen(),
   };
 }

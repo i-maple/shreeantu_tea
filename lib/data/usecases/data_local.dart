@@ -193,6 +193,11 @@ class DataLocal extends DatasEntity {
     }
   }
 
+  Future<List> search(String boxName, {required String searchQuery, required String searchField}) async {
+    final box = await _transactionBox(boxName);
+    return box.values.where((element) => element[searchField] == searchQuery).toList();
+  }
+
   Future<List<Party?>> getAllParty() async {
     try {
       List? partyMap = await _getAll(_partyBox);

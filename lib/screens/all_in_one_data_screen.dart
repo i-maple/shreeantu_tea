@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shreeantu_tea/data/usecases/data_local.dart';
+import 'package:shreeantu_tea/forms/common_form.dart';
 import 'package:shreeantu_tea/forms/firewood_expense_form.dart';
 import 'package:shreeantu_tea/forms/form_fields.dart';
 import 'package:shreeantu_tea/forms/purchase_form.dart';
@@ -9,8 +10,6 @@ import 'package:shreeantu_tea/forms/sale.dart';
 import 'package:shreeantu_tea/forms/staff_expense_form.dart';
 import 'package:shreeantu_tea/model/purchase_model.dart';
 import 'package:shreeantu_tea/providers/quality_grade_provider.dart';
-import 'package:shreeantu_tea/screens/all_farmer_screen.dart';
-import 'package:shreeantu_tea/screens/party_screen.dart';
 import 'package:shreeantu_tea/utils/colors.dart';
 import 'package:shreeantu_tea/utils/utilities.dart';
 import 'package:shreeantu_tea/widgets/ledger_widget.dart';
@@ -45,7 +44,12 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
       'Sale' => const SaleForm(),
       'Firewood Expense' => const FirewoodExpenseForm(),
       'Staff Expenses' => const StaffExpenseForm(),
-      _ => 'Select a Transaction Type'.text.make(),
+      _ => type.isEmptyOrNull
+          ? 'Select a Transaction Type'.text.make()
+          : CommonForm(
+              transactionType: type!,
+              isExpense: type != 'Insurance',
+            ),
     };
   }
 
@@ -53,52 +57,10 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: 'Shree Antu Tea'.text.white.make(),
+        foregroundColor: Colors.white,
+        title: 'Datas'.text.bold.white.make(),
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
-      ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            const DrawerHeader(
-              child: Placeholder(
-                fallbackHeight: 200,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.agriculture),
-              title: 'Farmers'.text.make(),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AllFarmerScreen(),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.support_agent),
-              title: 'Party'.text.make(),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const PartyScreen(),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.peopleCarryBox),
-              title: 'Labour'.text.make(),
-            ),
-            ListTile(
-              leading: const Icon(FontAwesomeIcons.peopleGroup),
-              title: 'Staff'.text.make(),
-            ),
-            ListTile(
-              leading: const FaIcon(Icons.money),
-              title: 'Bank'.text.make(),
-            ),
-          ],
-        ).scrollVertical(),
       ),
       body: VxResponsive(
         large: _twoRowEntryAndDisplay(),
@@ -124,6 +86,7 @@ class _AllInOneDataScreenState extends State<AllInOneDataScreen> {
         children: [
           ListTile(
             tileColor: AppColors.primaryColor,
+            textColor: Colors.white,
             leading: 'Transaction Type'.text.white.make(),
             trailing: FutureBuilder(
                 future: DataLocal.instance.getAmount(),

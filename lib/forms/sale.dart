@@ -45,8 +45,8 @@ class _SaleFormState extends State<SaleForm> {
   Future<void> addSale() async {
     final prov = Provider.of<QualityGrade>(context, listen: false);
 
-    if (prov.currentParty == null) {
-      SnackbarService.showFailedSnackbar(context, 'Select a farmer');
+    if (_partySearch.text.isEmpty) {
+      SnackbarService.showFailedSnackbar(context, 'Select a party');
       return;
     }
     if (prov.date == null) {
@@ -65,8 +65,7 @@ class _SaleFormState extends State<SaleForm> {
     final Map<String, dynamic> data = {
       'id': DateTime.now().millisecondsSinceEpoch.toString(),
       'date': prov.date!.format('y-M-d').toString(),
-      'Party Name': prov.currentParty!.name,
-      'Party Id': prov.currentParty!.id,
+      'Party Name': _partySearch.text,
       'invoiceNumber': _invoiceNumber.text,
       'quantity': _quantity.text.isNotBlank ? _quantity.text : 0,
       'rate': _rateController.text,
@@ -100,34 +99,10 @@ class _SaleFormState extends State<SaleForm> {
         FormFields.pickDate(context),
         FormFields.commonTextField(
             controller: _invoiceNumber, labelText: 'Bill Number'),
-        FutureBuilder(
-            future: DataLocal.instance.getAllParty(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                    print('object');
-                return FormFields.grayWrapper(
-                  FormFields.chooseDropdown<Party>(
-                    context,
-                    controller: _partySearch,
-                    hint: 'Search Farmer',
-                    value: Provider.of<QualityGrade>(
-                      context,
-                    ).currentParty,
-                    items: snapshot.data!
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e!.name),
-                            ))
-                        .toList(),
-                    onChanged: (p0) =>
-                        Provider.of<QualityGrade>(context, listen: false)
-                            .currentParty = p0,
-                  ),
-                );
-              }
-              return const CircularProgressIndicator();
-            }),
+        FormFields.commonTextField(
+          controller: _partySearch,
+          hint: 'Party Name',
+        ),
         FormFields.commonTextField(
           controller: _quantity,
           labelText: 'Quantity',

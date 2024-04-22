@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       drawer: Drawer(
+        backgroundColor: AppColors.primaryColor,
         child: Column(
           children: [
             const DrawerHeader(
@@ -74,13 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: const Icon(Icons.add),
-              title: const Text('Create another user'),
+              leading: const Icon(Icons.home, color: Colors.white,),
+              title: 'Home'.text.white.make(),
               onTap: () {},
             ),
           ],
@@ -111,8 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _clickableHomeBox(BuildContext context,
       {required String text,
       required Widget icon,
-      required String route,
-      Object? args}) {
+      required String route}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
