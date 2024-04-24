@@ -142,29 +142,30 @@ class _PurchaseFormState extends State<PurchaseForm> {
           onChanged: (value) {
             if (_amount.text.isNotEmpty) {
               double qty = double.tryParse(value ?? '') ?? 1;
-              double amt = double.tryParse(_amount.text) ?? 0;
-              _rateController.text = (amt / qty).toString();
+              double rate = double.tryParse(_rateController.text) ?? 0;
+              _amount.text = (rate * qty).toString();
             }
           },
         ),
         FormFields.commonTextField(
-            controller: _amount,
-            labelText: 'Amount',
-            onChanged: (value) {
+          controller: _rateController,
+          labelText: 'Rate',
+          onChanged: (value) {
               if (_quantity.text.isNotEmpty) {
                 double qty = double.tryParse(_quantity.text) ?? 1;
-                double amt = double.tryParse(value ?? '0') ?? 0;
-                _rateController.text = (amt / qty).toString();
+                double rate = double.tryParse(value ?? '0') ?? 0;
+                _amount.text = (rate * qty).toString();
               }
-            }),
+            }
+        ),
+        FormFields.commonTextField(
+            controller: _amount,
+            labelText: 'Amount',
+            disabled : true,
+            ),
         FormFields.commonTextField(
           controller: _qualityGrade,
           labelText: 'Quality Grade',
-        ),
-        FormFields.commonTextField(
-          controller: _rateController,
-          labelText: 'Rate',
-          disabled: true,
         ),
         PrimaryButton(
             onTap: addPurchase,
