@@ -7,10 +7,14 @@ class LedgerWidget extends StatelessWidget {
     super.key,
     required this.future,
     this.headers,
+    this.onUpdate,
+    this.onDelete,
   });
 
   final Future future;
   final List<String>? headers;
+  final VoidCallback? onUpdate;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +24,10 @@ class LedgerWidget extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               var datas = snapshot.data;
-              print('datas $datas');
               List<List<String>> lists = [];
-              List<String> header =
-                  List.from(datas).isNotEmpty ? datas[0].keys.toList() : headers;
+              List<String> header = List.from(datas).isNotEmpty
+                  ? datas[0].keys.toList()
+                  : headers;
               for (Map<dynamic, dynamic> data in datas!) {
                 lists.add(
                   data.values.map((e) => e.toString()).toList(),
@@ -32,16 +36,16 @@ class LedgerWidget extends StatelessWidget {
               return DataTable(
                 headingRowColor:
                     MaterialStatePropertyAll(AppColors.primaryContainer),
-                columns: header
-                    .map(
-                      (e) => DataColumn(
-                        label: Text(
-                          e.toUpperCase(),
-                        ),
-                        tooltip: e,
+                columns: [
+                  ...header.map(
+                    (e) => DataColumn(
+                      label: Text(
+                        e.toUpperCase(),
                       ),
-                    )
-                    .toList(),
+                      tooltip: e,
+                    ),
+                  ),
+                ],
                 rows: lists
                     .map((e) => DataRow(
                           cells: e
