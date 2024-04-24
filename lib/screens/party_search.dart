@@ -45,6 +45,8 @@ class _PartySearchScreenState extends State<PartySearchScreen> {
     print(foundResult);
   }
 
+  openDialogPage(){}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
