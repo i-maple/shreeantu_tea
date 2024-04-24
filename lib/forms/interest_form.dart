@@ -59,7 +59,7 @@ class _InterestFormState extends State<InterestForm> {
     };
 
     String response =
-        await DataLocal.instance.addDataByType('Firewood Expense', data);
+        await DataLocal.instance.addDataByType('Firewood Expense', data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();

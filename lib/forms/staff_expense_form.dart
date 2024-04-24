@@ -58,7 +58,7 @@ class _StaffExpenseFormState extends State<StaffExpenseForm> {
     };
 
     String response =
-        await DataLocal.instance.addDataByType('Staff Expenses', data);
+        await DataLocal.instance.addDataByType('Staff Expenses',data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();

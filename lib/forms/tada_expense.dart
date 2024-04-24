@@ -55,7 +55,8 @@ class _FirewoodExpenseFormState extends State<FirewoodExpenseForm> {
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response = await DataLocal.instance.addDataByType('Tada Expenses', data);
+    String response = await DataLocal.instance
+        .addDataByType('Tada Expenses', data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();

@@ -21,8 +21,7 @@ class DataLocal extends DatasEntity {
   Future<Box> get _amountBox async => await HiveDb().box<double>('amount');
   Future<Box> get _farmerPaymentBox async =>
       await HiveDb().box('farmer-payment');
-  Future<Box> _transactionBox(String box) async =>
-      await HiveDb().box(box);
+  Future<Box> _transactionBox(String box) async => await HiveDb().box(box);
 
   DataLocal._internal();
 
@@ -38,11 +37,12 @@ class DataLocal extends DatasEntity {
 
   Future<String> addDataByType(
     String type,
+    String id,
     Map<String, dynamic> data,
   ) async {
     try {
       final transactionBox = await _transactionBox(type);
-      await transactionBox.add(data);
+      await transactionBox.put(id, data);
       return 'success';
     } catch (e) {
       return e.toString();
@@ -52,13 +52,11 @@ class DataLocal extends DatasEntity {
   Future<List<Map<String, dynamic>>> getDataByType(String type) async {
     try {
       final transactionBox = await _transactionBox(type);
-      if(transactionBox.isEmpty){
+      if (transactionBox.isEmpty) {
         return [];
       }
       return transactionBox.values
-          .map<Map<String, dynamic>>((e) => {
-                ...e
-              })
+          .map<Map<String, dynamic>>((e) => {...e})
           .toList();
     } catch (e) {
       return [
@@ -193,9 +191,12 @@ class DataLocal extends DatasEntity {
     }
   }
 
-  Future<List> search(String boxName, {required String searchQuery, required String searchField}) async {
+  Future<List> search(String boxName,
+      {required String searchQuery, required String searchField}) async {
     final box = await _transactionBox(boxName);
-    return box.values.where((element) => element[searchField] == searchQuery).toList();
+    return box.values
+        .where((element) => element[searchField] == searchQuery)
+        .toList();
   }
 
   Future<List<Party?>> getAllParty() async {
@@ -210,6 +211,12 @@ class DataLocal extends DatasEntity {
     } catch (e) {
       rethrow;
     }
+  }
+
+  void update(String transactionType,
+      {required String key, required String valueToReplace}) async {
+    final bo = await _transactionBox(transactionType);
+    bo.get(key);
   }
 
   Future<List<Bank?>> getAllBank() async {
@@ -229,6 +236,7 @@ class DataLocal extends DatasEntity {
     }
     return staff;
   }
+
   Future<List<Labour?>> getAllLabour() async {
     List? labourMap = await _getAll(_labourBox);
     List<Labour> labour = [];

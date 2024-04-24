@@ -72,7 +72,7 @@ class _SaleFormState extends State<SaleForm> {
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response = await DataLocal.instance.addDataByType('Sale', data);
+    String response = await DataLocal.instance.addDataByType('Sale',data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();

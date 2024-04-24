@@ -81,7 +81,7 @@ class _PurchaseFormState extends State<PurchaseForm> {
       'qualityGrade': _qualityGrade.text,
     };
 
-    String response = await DataLocal.instance.addDataByType('Purchase', data);
+    String response = await DataLocal.instance.addDataByType('Purchase', data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();

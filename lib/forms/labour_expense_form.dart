@@ -65,7 +65,7 @@ class _LabourExpenseFormState extends State<LabourExpenseForm> {
     };
 
     String response =
-        await DataLocal.instance.addDataByType('Labour Expenses', data);
+        await DataLocal.instance.addDataByType('Labour Expenses',data["id"], data);
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
     } else {

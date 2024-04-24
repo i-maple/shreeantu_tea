@@ -57,8 +57,11 @@ class _CommonFormState extends State<CommonForm> {
       'amount': _amount.text.isNotBlank ? _amount.text : 0,
     };
 
-    String response =
-        await DataLocal.instance.addDataByType(widget.transactionType, data);
+    String response = await DataLocal.instance.addDataByType(
+      widget.transactionType,
+      data['id'],
+      data,
+    );
     if (response == 'success' && mounted) {
       SnackbarService.showSuccessSnackbar(context, 'Done');
       final double preAmount = await DataLocal.instance.getAmount();
