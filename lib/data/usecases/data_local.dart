@@ -32,7 +32,7 @@ class DataLocal extends DatasEntity {
 
   Future<void> updateAmount(double amount) async {
     final box = await _amountBox;
-    box.put('amount', amount);
+    await box.put('amount', amount);
   }
 
   Future<String> addDataByType(
@@ -213,10 +213,12 @@ class DataLocal extends DatasEntity {
     }
   }
 
-  void update(String transactionType,
+  void update(String transactionType, String id,
       {required String key, required String valueToReplace}) async {
     final bo = await _transactionBox(transactionType);
-    bo.get(key);
+    Map data= bo.get(id);
+    data[key] = valueToReplace;
+    await bo.put(key, data);
   }
 
   Future<List<Bank?>> getAllBank() async {
